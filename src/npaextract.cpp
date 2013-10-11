@@ -10,10 +10,10 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    NpaFile Achieve(argv[1]);
+    NpaFile Achieve(argv[1], NPA_READ);
     for (NpaIterator File = Achieve.Begin(); File != Achieve.End(); ++File)
     {
         std::cout << "Writing file: " << File.GetFileName() << "..." << std::endl;
-        File.WriteToDisk();
+        File.Save();
     }
 }
