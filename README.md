@@ -9,3 +9,4 @@ nptools is a collection of utilities for manipulating nitroplus game files.
 **npapack**: Creates .npa achieve from specified directory.  
 **nsbparse**: Parses .nsb script file.  
 **nsbcompile**: Compiles script file into .nsb format.  
+**npinstall**: Installs nitroplus game.  
