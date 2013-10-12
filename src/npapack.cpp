@@ -13,7 +13,7 @@ void RecursiveAppend(NpaFile& Achieve, const path& dir)
     for (directory_iterator i(dir); i != end; ++i)
     {
         if (is_directory(i->path()))
-            RecursiveAppend(Achieve, dir);
+            RecursiveAppend(Achieve, i->path());
         else
         {
             std::cout << "Appending file: " << i->path().string() << "..." << std::endl;
