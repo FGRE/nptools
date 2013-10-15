@@ -19,7 +19,8 @@ int main(int argc, char** argv)
         uint32_t i = 0;
 
         // Cause pLine->Magic == MAGIC_CALL is bugged...
-        if (strcmp("CALL", NsbFile::StringifyMagic(pLine->Magic)) == 0)
+        if (strcmp("CALL", NsbFile::StringifyMagic(pLine->Magic)) == 0 ||
+            strcmp("BEGIN", NsbFile::StringifyMagic(pLine->Magic)) == 0)
             File << pLine->Params[i++];
         else
             File << NsbFile::StringifyMagic(pLine->Magic);
