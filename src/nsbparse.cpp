@@ -17,7 +17,7 @@ int main(int argc, char** argv)
 
     NsbFile Script(argv[1], NSB_COMPILED);
     std::ofstream File(argv[2]);
-    uint16_t unk = 102;
+    uint16_t unk = 115;
     while (Line* pLine = Script.GetNextLine())
     {
         uint32_t i = 0;
@@ -45,5 +45,11 @@ int main(int argc, char** argv)
             File << pLine->Params[i] << ((i != (pLine->Params.size() - 1)) ? ", " : "");
         File << ");\n";
         File << std::flush;
+    }
+
+    for (uint32_t i = 0; i < UnkMagic.size(); ++i)
+    {
+        std::cout << "(" << "MAGIC_UNK" << std::dec << unk - UnkMagic.size() + i << ", "
+                  << "\"UNK" << unk - UnkMagic.size() + i << "\")" << std::endl;
     }
 }
