@@ -27,7 +27,7 @@ int main(int argc, char** argv)
             if (std::find(UnkMagic.begin(), UnkMagic.end(), pLine->Magic) == UnkMagic.end())
             {
                 std::cout << std::uppercase << "MAGIC_UNK" << std::dec << unk++ << " = " << "SWAP_UINT16(0x"
-                          << std::hex << SWAP_UINT16(pLine->Magic) << ")," << std::endl;
+                          << std::hex << uint16_t(SWAP_UINT16(pLine->Magic)) << ")," << std::endl;
                 UnkMagic.push_back(pLine->Magic);
             }
             continue;
