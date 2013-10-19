@@ -19,7 +19,7 @@ int main(int argc, char** argv)
     uint32_t Entry = 1;
     uint16_t NumParams;
 
-    while (getline(Script, SLine, ';') && SLine != "\n")
+    while (getline(Script, SLine))
     {
         SLine.erase(std::remove_if(SLine.begin(), SLine.end(), isspace), SLine.end());
         NumParams = std::count(SLine.begin(), SLine.end(), ',') + 1;
