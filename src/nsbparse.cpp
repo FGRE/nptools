@@ -14,10 +14,10 @@ int main(int argc, char** argv)
     }
 
     std::vector<uint16_t> UnkMagic;
-
     NsbFile Script(argv[1]);
     std::ofstream File(argv[2]);
     uint16_t unk = 161;
+
     while (Line* pLine = Script.GetNextLine())
     {
         uint32_t i = 0;
@@ -48,8 +48,6 @@ int main(int argc, char** argv)
     }
 
     for (uint32_t i = 0; i < UnkMagic.size(); ++i)
-    {
         std::cout << "(" << "MAGIC_UNK" << std::dec << unk - UnkMagic.size() + i << ", "
                   << "\"UNK" << unk - UnkMagic.size() + i << "\")" << std::endl;
-    }
 }
