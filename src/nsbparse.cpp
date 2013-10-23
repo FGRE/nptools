@@ -1,4 +1,5 @@
 #include "nsbfile.hpp"
+#include "nsbmagic.hpp"
 
 #include <iostream>
 #include <fstream>
