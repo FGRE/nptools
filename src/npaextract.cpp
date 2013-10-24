@@ -3,7 +3,9 @@
 #include <iostream>
 #include <boost/locale.hpp>
 #include <boost/filesystem.hpp>
+using namespace boost::filesystem;
 using namespace boost::locale;
+using namespace boost::locale::conv;
 
 void WriteFile(char* Data, uint32_t Size, std::string FileName)
 {
@@ -13,8 +15,8 @@ void WriteFile(char* Data, uint32_t Size, std::string FileName)
     do
     {
         *delim = 0;
-        if (!boost::filesystem::exists(boost::filesystem::path(Path)))
-            boost::filesystem::create_directory(boost::filesystem::path(Path));
+        if (!exists(path(Path)))
+            create_directory(path(Path));
         *delim = '/';
     } while ((delim = strchr(delim + 1, '/')));
 
@@ -36,7 +38,7 @@ int main(int argc, char** argv)
     NpaFile Achieve(argv[1], NPA_READ);
     for (NpaIterator File = Achieve.Begin(); File != Achieve.End(); ++File)
     {
-        std::string FileName = conv::to_utf<char>(File.GetFileNameRaw(), File.GetFileNameRaw() + File.GetFileNameSize(), loc);
+        std::string FileName = to_utf<char>(File.GetFileNameRaw(), File.GetFileNameRaw() + File.GetFileNameSize(), loc);
         std::cout << "Writing file: " << FileName << "..." << std::endl;
         WriteFile(File.GetFileData(), File.GetFileSize(), FileName);
     }
