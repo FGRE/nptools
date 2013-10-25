@@ -17,7 +17,7 @@ int main(int argc, char** argv)
     std::vector<uint16_t> UnkMagic;
     NsbFile Script(argv[1]);
     std::ofstream File(argv[2]);
-    uint16_t unk = 161;
+    uint16_t unk = 162;
 
     while (Line* pLine = Script.GetNextLine())
     {
