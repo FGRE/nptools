@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include <fstream>
-#include <cstring>
 #include <algorithm>
 
 int main(int argc, char** argv)
@@ -35,8 +34,7 @@ int main(int argc, char** argv)
         }
 
         // Cause pLine->Magic == MAGIC_CALL is bugged...
-        if (strcmp("CALL", NsbFile::StringifyMagic(pLine->Magic)) == 0 ||
-            strcmp("BEGIN", NsbFile::StringifyMagic(pLine->Magic)) == 0)
+        if (pLine->Magic == uint16_t(MAGIC_CALL) || pLine->Magic == uint16_t(MAGIC_BEGIN))
             File << pLine->Params[i++];
         else
             File << NsbFile::StringifyMagic(pLine->Magic);
