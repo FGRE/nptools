@@ -7,15 +7,25 @@
 
 int main(int argc, char** argv)
 {
-    if (argc != 3)
+    if (argc < 2 || argc > 3)
     {
-        std::cout << "usage: " << argv[0] << " <input.nsb> <output.nss>" << std::endl;
+        std::cout << "usage: " << argv[0] << " <input.nsb> [output.nss]" << std::endl;
         return 1;
     }
 
+    std::string Output;
+    if (argc == 2)
+    {
+        Output = argv[1];
+        Output[Output.size() - 1] = 's';
+        Output = Output.substr(Output.find_last_of("/") + 1);
+    }
+    else
+        Output = argv[2];
+
     std::vector<uint16_t> UnkMagic;
     NsbFile Script(argv[1]);
-    std::ofstream File(argv[2]);
+    std::ofstream File(Output);
     uint16_t unk = 162;
 
     while (Line* pLine = Script.GetNextLine())
