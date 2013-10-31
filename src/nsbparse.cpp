@@ -26,7 +26,7 @@ int main(int argc, char** argv)
     std::vector<uint16_t> UnkMagic;
     NsbFile Script(argv[1]);
     std::ofstream File(Output);
-    uint16_t unk = 162;
+    uint16_t unk = MAGIC_UNKMAX;
 
     while (Line* pLine = Script.GetNextLine())
     {
@@ -43,7 +43,6 @@ int main(int argc, char** argv)
             continue;
         }
 
-        // Cause pLine->Magic == MAGIC_CALL is bugged...
         if (pLine->Magic == uint16_t(MAGIC_CALL) || pLine->Magic == uint16_t(MAGIC_BEGIN))
             File << pLine->Params[i++];
         else
@@ -53,7 +52,6 @@ int main(int argc, char** argv)
         for (; i < pLine->Params.size(); ++i)
             File << pLine->Params[i] << ((i != (pLine->Params.size() - 1)) ? ", " : "");
         File << ");\n";
-        File << std::flush;
     }
 
     for (uint32_t i = 0; i < UnkMagic.size(); ++i)
