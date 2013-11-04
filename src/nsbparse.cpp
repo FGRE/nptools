@@ -1,9 +1,11 @@
 #include "nsbfile.hpp"
 #include "nsbmagic.hpp"
+#include "mapfile.hpp"
 
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include <cstring>
 
 int main(int argc, char** argv)
 {
@@ -57,4 +59,13 @@ int main(int argc, char** argv)
     for (uint32_t i = 0; i < UnkMagic.size(); ++i)
         std::cout << "(" << "MAGIC_UNK" << std::dec << unk - UnkMagic.size() + i << ", "
                   << "\"UNK" << unk - UnkMagic.size() + i << "\")" << std::endl;
+
+    // Open Map file
+    std::strcpy(&argv[1][std::strlen(argv[1]) - 3], "map");
+    MapFile MFile(argv[1]);
+    std::strcpy(&Output[Output.size() - 3], "map");
+    std::ofstream MapOutput(Output);
+
+    while (MapLine* pLine = MFile.GetNextLine())
+        MapOutput << pLine->Value << '\n';
 }
