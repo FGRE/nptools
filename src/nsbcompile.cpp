@@ -22,6 +22,10 @@
 #include <algorithm>
 #include <cstring>
 #include <fstream>
+#include <boost/locale.hpp>
+using namespace boost::locale;
+using namespace boost::locale::conv;
+
 
 int main(int argc, char** argv)
 {
@@ -31,6 +35,7 @@ int main(int argc, char** argv)
         return 1;
     }
 
+    std::locale loc = generator().generate("ja_JP.SHIFT-JIS");
     std::ifstream Script(argv[1]);
     std::ofstream Binary(argv[2], std::ios::binary);
     std::string SLine;
@@ -40,6 +45,7 @@ int main(int argc, char** argv)
 
     while (getline(Script, SLine))
     {
+        SLine = from_utf<char>(SLine.c_str(), SLine.c_str() + SLine.size(), loc);
         FuncMagic = 0xFFFF;
         SLine.erase(std::remove_if(SLine.begin(), SLine.end(), isspace), SLine.end());
         std::size_t it = SLine.find("("), Delim;
@@ -69,7 +75,7 @@ int main(int argc, char** argv)
             Binary.write((char*)&NumParams, sizeof(uint16_t));
             Binary.write((char*)&it, sizeof(uint32_t));
             Binary.write(SLine.c_str(), it);
-            continue;
+            --NumParams;
         }
 
         if (NumParams == 0)
