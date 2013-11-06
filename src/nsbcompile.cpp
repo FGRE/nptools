@@ -36,14 +36,20 @@ int main(int argc, char** argv)
     std::string SLine;
     uint32_t Entry = 1;
     uint16_t NumParams;
+    uint16_t FuncMagic;
 
     while (getline(Script, SLine))
     {
+        FuncMagic = 0xFFFF;
         SLine.erase(std::remove_if(SLine.begin(), SLine.end(), isspace), SLine.end());
-        NumParams = std::count(SLine.begin(), SLine.end(), ',') + 1;
         std::size_t it = SLine.find("("), Delim;
+        if (SLine[it + 1] == ')')
+            NumParams = 0;
+        else
+            NumParams = std::count(SLine.begin(), SLine.end(), ',') + 1;
 
         Binary.write((char*)&Entry, sizeof(uint32_t));
+        ++Entry;
 
         SLine[it] = 0;
         if (uint16_t Magic = NsbFile::MagicifyString(SLine.c_str()))
@@ -51,26 +57,25 @@ int main(int argc, char** argv)
             Binary.write((char*)&Magic, sizeof(uint16_t));
             Binary.write((char*)&NumParams, sizeof(uint16_t));
         }
-        else if (SLine.find("function.") == 0 || SLine.find("macrosys") == 0)
-        {
-            uint16_t NsbBegin = uint16_t(MAGIC_BEGIN);
-            Binary.write((char*)&NsbBegin, sizeof(uint16_t));
-            Binary.write((char*)&NumParams, sizeof(uint16_t));
-            Binary.write((char*)&it, sizeof(uint32_t));
-            Binary.write(SLine.c_str(), it);
-        }
+        else if (SLine.find("function.") == 0)
+            FuncMagic = uint16_t(MAGIC_BEGIN);
         else
+            FuncMagic = uint16_t(MAGIC_CALL);
+
+        if (FuncMagic != 0xFFFF)
         {
-            uint16_t NsbCall = uint16_t(MAGIC_CALL);
-            Binary.write((char*)&NsbCall, sizeof(uint16_t));
+            ++NumParams;
+            Binary.write((char*)&FuncMagic, sizeof(uint16_t));
             Binary.write((char*)&NumParams, sizeof(uint16_t));
             Binary.write((char*)&it, sizeof(uint32_t));
             Binary.write(SLine.c_str(), it);
+            continue;
         }
+
+        if (NumParams == 0)
+            continue;
+
         SLine[it] = '(';
-
-        Binary.write((char*)&NumParams, sizeof(uint16_t));
-
         do
         {
             ++it;
@@ -87,7 +92,5 @@ int main(int argc, char** argv)
             Binary.write(&SLine[it], Size);
             it = Delim;
         } while (SLine[Delim] != ')');
-
-        ++Entry;
     }
 }
