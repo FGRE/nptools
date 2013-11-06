@@ -16,6 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * */
 #include "nsbfile.hpp"
+#include "nsbmagic.hpp"
 
 #include <iostream>
 #include <algorithm>
@@ -50,11 +51,25 @@ int main(int argc, char** argv)
             Binary.write((char*)&Magic, sizeof(uint16_t));
             Binary.write((char*)&NumParams, sizeof(uint16_t));
         }
+        else if (SLine.find("function.") == 0 || SLine.find("macrosys") == 0)
+        {
+            uint16_t NsbBegin = uint16_t(MAGIC_BEGIN);
+            Binary.write((char*)&NsbBegin, sizeof(uint16_t));
+            Binary.write((char*)&NumParams, sizeof(uint16_t));
+            Binary.write((char*)&it, sizeof(uint32_t));
+            Binary.write(SLine.c_str(), it);
+        }
         else
         {
-            // TODO: script-defined
+            uint16_t NsbCall = uint16_t(MAGIC_CALL);
+            Binary.write((char*)&NsbCall, sizeof(uint16_t));
+            Binary.write((char*)&NumParams, sizeof(uint16_t));
+            Binary.write((char*)&it, sizeof(uint32_t));
+            Binary.write(SLine.c_str(), it);
         }
         SLine[it] = '(';
+
+        Binary.write((char*)&NumParams, sizeof(uint16_t));
 
         do
         {
