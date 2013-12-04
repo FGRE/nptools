@@ -64,7 +64,7 @@ int main(int argc, char** argv)
             Binary.write((char*)&NumParams, sizeof(uint16_t));
         }
         else if (SLine.find("function.") == 0)
-            FuncMagic = uint16_t(MAGIC_BEGIN);
+            FuncMagic = uint16_t(MAGIC_FUNCTION_BEGIN);
         else
             FuncMagic = uint16_t(MAGIC_CALL);
 

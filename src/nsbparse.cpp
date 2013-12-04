@@ -62,7 +62,7 @@ int main(int argc, char** argv)
             continue;
         }
 
-        if (pLine->Magic == uint16_t(MAGIC_CALL) || pLine->Magic == uint16_t(MAGIC_BEGIN))
+        if (pLine->Magic == uint16_t(MAGIC_CALL) || pLine->Magic == uint16_t(MAGIC_FUNCTION_BEGIN))
             File << pLine->Params[i++];
         else
             File << NsbFile::StringifyMagic(pLine->Magic);
@@ -84,5 +84,5 @@ int main(int argc, char** argv)
     std::ofstream MapOutput(Output);
 
     while (MapLine* pLine = MFile.GetNextLine())
-        MapOutput << pLine->Value << '\n';
+        MapOutput << pLine->Label << '\n';
 }
