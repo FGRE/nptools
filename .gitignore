@@ -6,8 +6,28 @@
 # Compiled Dynamic libraries
 *.so
 *.dylib
+*.dll
 
 # Compiled Static libraries
 *.lai
 *.la
 *.a
+
+# Script files
+*.map
+*.nss
+*.nsb
+
+# Extracted achieves
+voice/
+sound/
+cg/
+nss/
+nssex/
+
+# Executables
+nsbparse
+nsbcompile
+npapack
+npinstall
+*.exe
