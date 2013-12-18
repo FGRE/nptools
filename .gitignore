@@ -30,4 +30,6 @@ nsbparse
 nsbcompile
 npapack
 npinstall
+npaextract
+nipa
 *.exe
