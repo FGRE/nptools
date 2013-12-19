@@ -57,6 +57,8 @@ int main(int argc, char** argv)
     {
         std::string FileName = to_utf<char>(File.GetFileNameRaw(), File.GetFileNameRaw() + File.GetFileNameSize(), loc);
         std::cout << "Writing file: " << FileName << "..." << std::endl;
-        WriteFile(File.GetFileData(), File.GetFileSize(), FileName);
+        char* Data = File.GetFileData();
+        WriteFile(Data, File.GetFileSize(), FileName);
+        delete Data;
     }
 }
