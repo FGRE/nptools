@@ -26,7 +26,6 @@
 using namespace boost::locale;
 using namespace boost::locale::conv;
 
-
 int main(int argc, char** argv)
 {
     if (argc != 3)
