@@ -42,8 +42,9 @@ int main(int argc, char** argv)
     uint16_t NumParams;
     uint16_t FuncMagic;
 
-    while (getline(Script, SLine))
+    while (getline(Script, SLine, ';'))
     {
+        Script.ignore();
         SLine = from_utf<char>(SLine.c_str(), SLine.c_str() + SLine.size(), loc);
         FuncMagic = 0xFFFF;
         SLine.erase(std::remove_if(SLine.begin(), SLine.end(), isspace), SLine.end());
