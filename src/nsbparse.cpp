@@ -22,6 +22,7 @@
 #include <iostream>
 #include <fstream>
 #include <algorithm>
+#include <iomanip>
 #include <cstring>
 
 int main(int argc, char** argv)
@@ -58,18 +59,26 @@ int main(int argc, char** argv)
 
     NsbFile Script(argv[PrintLineNumbers ? 2 : 1]);
     std::ofstream File(Output);
+    int indent = -1;
     while (Line* pLine = Script.GetNextLine())
     {
         uint32_t i = 0;
 
         if (PrintLineNumbers)
-            File << Script.GetNextLineEntry() - 1 << " ";
+            File << std::setfill('0') << std::setw(5) << Script.GetNextLineEntry() - 1 << " ";
 
         if (!NsbFile::IsValidMagic(pLine->Magic))
         {
             std::cout << "Unknown magic: " << std::hex << pLine->Magic << std::dec << std::endl;
             continue;
         }
+
+        if (pLine->Magic == MAGIC_SCOPE_BEGIN)
+            ++indent;
+        for (int i = 0; i < indent; ++i)
+            File << "    ";
+        if (pLine->Magic == MAGIC_SCOPE_END)
+            --indent;
 
         if (pLine->Magic == MAGIC_CALL || pLine->Magic == MAGIC_FUNCTION_BEGIN)
             File << pLine->Params[i++];
