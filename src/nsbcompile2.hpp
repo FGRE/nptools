@@ -1,0 +1,132 @@
+/* 
+ * nsbcompile: Nitroplus script compiler
+ * Copyright (C) 2014 Mislav Blažević <krofnica996@gmail.com>
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * */
+#ifndef NSB_COMPILE_HPP
+#define NSB_COMPILE_HPP
+
+#include <vector>
+#include <cstdint>
+#include <string>
+#include "nsbmagic.hpp"
+using namespace std;
+
+class Statement;
+class Argument;
+typedef std::vector<Statement*> StatementList;
+typedef std::vector<Argument*> ArgumentList;
+
+enum ArgumentType
+{
+    ARG_INT = 0,
+    ARG_STRING,
+    ARG_FLOAT,
+    ARG_VARIABLE,
+    ARG_FUNCTION
+};
+
+struct Node
+{
+    virtual ~Node() {}
+    virtual void Compile();
+};
+
+struct Statement : Node
+{
+    virtual void Compile() = 0;
+};
+
+// UNUSED
+struct Expression : Node
+{
+};
+
+struct Argument : Node
+{
+    Argument(const string& Data, ArgumentType Type) : Data(Data), Type(Type) {}
+    virtual void Compile();
+
+    string Data;
+    ArgumentType Type; // Todo: CallArgument : Argument?
+};
+
+struct Call : Statement
+{
+    Call(const Argument& Name, ArgumentList& Arguments) : Name(Name), Arguments(Arguments) {}
+    virtual void Compile();
+
+    Argument Name;
+    const uint16_t Magic = MAGIC_CALL;
+    const uint16_t SetParamMagic = MAGIC_SET_PARAM;
+    const uint16_t GetVarMagic = MAGIC_GET;
+    const uint16_t NumSetParamParams = 2;
+    const uint16_t NumGetVarParams = 1;
+    ArgumentList Arguments;
+};
+
+struct Block : Statement
+{
+    Block() {}
+    Block(StatementList& Statements) : Statements(Statements) {}
+    virtual void Compile();
+
+    StatementList Statements;
+    const uint16_t BeginMagic = MAGIC_SCOPE_BEGIN;
+    const uint16_t EndMagic = MAGIC_SCOPE_END;
+    const uint16_t NumParams = 0;
+};
+
+struct Condition : Block
+{
+    virtual void Compile()
+    {
+        Block::Compile();
+    }
+};
+
+struct Subroutine : Statement
+{
+    Subroutine(const Argument& Name, Block& SubroutineBlock) : Name(Name), SubroutineBlock(SubroutineBlock) {}
+    void CompilePrototype(uint16_t BeginMagic, uint32_t NumBeginParams);
+    virtual void Compile();
+    void CompileReturn(uint16_t EndMagic);
+
+    const uint16_t NumEndParams = 0;
+    Argument Name;
+    Block& SubroutineBlock;
+};
+
+struct Function : Subroutine
+{
+    Function(const Argument& Name, ArgumentList& Arguments, Block& Statements) : Subroutine(Name, Statements), Arguments(Arguments) {}
+    virtual void Compile();
+
+    ArgumentList Arguments;
+};
+
+struct Chapter : Subroutine
+{
+    Chapter(const Argument& Name, Block& Statements) : Subroutine(Name, Statements) {}
+    virtual void Compile();
+};
+
+struct Scene : Subroutine
+{
+    Scene(const Argument& Name, Block& Statements) : Subroutine(Name, Statements) {}
+    virtual void Compile();
+};
+
+#endif
