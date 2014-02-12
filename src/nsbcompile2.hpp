@@ -42,6 +42,7 @@ struct Node
 {
     virtual ~Node() {}
     virtual void Compile();
+    void CompileMagic(uint16_t Magic, uint16_t NumParams);
 };
 
 struct Statement : Node
@@ -102,19 +103,19 @@ struct Condition : Block
 
 struct Subroutine : Statement
 {
-    Subroutine(const Argument& Name, Block& SubroutineBlock) : Name(Name), SubroutineBlock(SubroutineBlock) {}
+    Subroutine(Argument& Name, Block& SubroutineBlock) : Name(Name), SubroutineBlock(SubroutineBlock) {}
     void CompilePrototype(uint16_t BeginMagic, uint32_t NumBeginParams);
     virtual void Compile();
     void CompileReturn(uint16_t EndMagic);
 
     const uint16_t NumEndParams = 0;
-    Argument Name;
+    Argument& Name;
     Block& SubroutineBlock;
 };
 
 struct Function : Subroutine
 {
-    Function(const Argument& Name, ArgumentList& Arguments, Block& Statements) : Subroutine(Name, Statements), Arguments(Arguments) {}
+    Function(Argument& Name, ArgumentList& Arguments, Block& Statements) : Subroutine(Name, Statements), Arguments(Arguments) {}
     virtual void Compile();
 
     ArgumentList Arguments;
@@ -122,13 +123,13 @@ struct Function : Subroutine
 
 struct Chapter : Subroutine
 {
-    Chapter(const Argument& Name, Block& Statements) : Subroutine(Name, Statements) {}
+    Chapter(Argument& Name, Block& Statements) : Subroutine(Name, Statements) {}
     virtual void Compile();
 };
 
 struct Scene : Subroutine
 {
-    Scene(const Argument& Name, Block& Statements) : Subroutine(Name, Statements) {}
+    Scene(Argument& Name, Block& Statements) : Subroutine(Name, Statements) {}
     virtual void Compile();
 };
 
@@ -137,10 +138,25 @@ struct Assignment : Expression
     Assignment(Argument& Name, Expression& Rhs) : Name(Name), Rhs(Rhs) {}
     virtual void Compile();
 
-    Argument Name;
+    Argument& Name;
     Expression& Rhs;
     const uint16_t Magic = MAGIC_SET;
     const uint16_t NumParams = 1;
+};
+
+struct BinaryOperator : Expression
+{
+    BinaryOperator(Expression& Lhs, int Op, Expression& Rhs) : Lhs(Lhs), Op(Op), Rhs(Rhs) {}
+    virtual void Compile();
+
+    int Op;
+    Expression& Lhs;
+    Expression& Rhs;
+    const uint16_t MagicAdd = MAGIC_ADD;
+    const uint16_t MagicSub = MAGIC_SUBSTRACT;
+    const uint16_t MagicDiv = MAGIC_DIVIDE;
+    const uint16_t MagicMul = 0; // UNK
+    const uint16_t NumParams = 0;
 };
 
 #endif
