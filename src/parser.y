@@ -64,6 +64,7 @@ func_args : { $$ = new ArgumentList(); }
 arg : TDOLLAR TIDENTIFIER { $$ = new Argument(string("$") + *$2, ARG_VARIABLE); delete $2; }
       | TIDENTIFIER { $$ = new Argument(*$1, ARG_FUNCTION); delete $1; }
       | TQUOTE TIDENTIFIER TQUOTE { $$ = new Argument(*$2, ARG_STRING); delete $2; }
+      | TINTEGER { $$ = new Argument(*$1, ARG_INT); delete $1; }
       ;
 
 call : arg TLPAREN func_args TRPAREN TSEMICOLON { $$ = new Call(*$1, *$3); delete $3; }
