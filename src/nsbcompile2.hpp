@@ -41,8 +41,7 @@ enum ArgumentType
 struct Node
 {
     virtual ~Node() {}
-    virtual void Compile();
-    void CompileMagic(uint16_t Magic, uint16_t NumParams);
+    void Compile(uint16_t Magic, uint16_t NumParams);
 };
 
 struct Statement : Node

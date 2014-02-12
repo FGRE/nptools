@@ -35,32 +35,27 @@ const char* ArgumentTypes[] =
     "FLOAT"
 };
 
-void Node::Compile()
+void Node::Compile(uint16_t Magic, uint16_t NumParams)
 {
     Output.write((char*)&Counter, sizeof(uint32_t));
-    ++Counter;
-}
-
-void Node::CompileMagic(uint16_t Magic, uint16_t NumParams)
-{
     Output.write((char*)&Magic, sizeof(uint16_t));
     Output.write((char*)&NumParams, sizeof(uint16_t));
+    ++Counter;
 }
 
 void Argument::Compile()
 {
-    Node::Compile();
     // Value
     if (Type == ARG_VARIABLE)
     {
-        CompileMagic(GetVarMagic, NumGetVarParams);
+        Node::Compile(GetVarMagic, NumGetVarParams);
     }
     // Variable
     else
     {
         const char* StrType = ArgumentTypes[Type];
         uint32_t TypeSize = strlen(StrType);
-        CompileMagic(SetParamMagic, NumSetParamParams);
+        Node::Compile(SetParamMagic, NumSetParamParams);
         Output.write((char*)&TypeSize, sizeof(uint32_t));
         Output.write(StrType, TypeSize);
     }
@@ -82,18 +77,13 @@ void Call::Compile()
     for (auto i = Arguments.begin(); i != Arguments.end(); ++i)
         (*i)->Compile();
 
-    // Call
-    Node::Compile();
-
     // Builtin function
     if (uint32_t BuiltinMagic = NsbFile::MagicifyString(Name.Data.c_str()))
-    {
-        CompileMagic(BuiltinMagic, NumParams);
-    }
+        Node::Compile(BuiltinMagic, NumParams);
     // Script function
     else
     {
-        CompileMagic(Magic, NumParams);
+        Node::Compile(Magic, NumParams);
         Name.CompileRaw();
     }
     // Arguments
@@ -103,18 +93,15 @@ void Call::Compile()
 
 void Block::Compile()
 {
-    Node::Compile();
-    CompileMagic(BeginMagic, NumParams);
+    Node::Compile(BeginMagic, NumParams);
     for (auto i = Statements.begin(); i != Statements.end(); ++i)
         (*i)->Compile();
-    Node::Compile();
-    CompileMagic(EndMagic, NumParams);
+    Node::Compile(EndMagic, NumParams);
 }
 
 void Subroutine::CompilePrototype(uint16_t BeginMagic, uint32_t NumBeginParams)
 {
-    Node::Compile();
-    CompileMagic(BeginMagic, NumBeginParams);
+    Node::Compile(BeginMagic, NumBeginParams);
     Name.CompileRaw();
 }
 
@@ -125,8 +112,7 @@ void Subroutine::Compile()
 
 void Subroutine::CompileReturn(uint16_t EndMagic)
 {
-    Node::Compile();
-    CompileMagic(EndMagic, NumEndParams);
+    Node::Compile(EndMagic, NumEndParams);
 }
 
 void Function::Compile()
@@ -158,8 +144,7 @@ void Scene::Compile()
 void Assignment::Compile()
 {
     Rhs.Compile();
-    Node::Compile();
-    CompileMagic(Magic, NumParams);
+    Node::Compile(Magic, NumParams);
     Name.CompileRaw();
 }
 
@@ -175,8 +160,7 @@ void BinaryOperator::Compile()
         case TMUL: Magic = MagicMul; break;
         case TDIV: Magic = MagicDiv; break;
     }
-    Node::Compile();
-    CompileMagic(Magic, NumParams);
+    Node::Compile(Magic, NumParams);
 }
 
 int main(int argc, char** argv)
