@@ -49,17 +49,24 @@ struct Statement : Node
     virtual void Compile() = 0;
 };
 
-// UNUSED
 struct Expression : Node
 {
+    virtual void Compile()
+    {
+    }
 };
 
-struct Argument : Node
+struct Argument : Expression
 {
     Argument(const string& Data, ArgumentType Type) : Data(Data), Type(Type) {}
+    void CompileRaw();
     virtual void Compile();
 
     string Data;
+    const uint16_t SetParamMagic = MAGIC_SET_PARAM;
+    const uint16_t GetVarMagic = MAGIC_GET;
+    const uint16_t NumSetParamParams = 2;
+    const uint16_t NumGetVarParams = 1;
     ArgumentType Type; // Todo: CallArgument : Argument?
 };
 
@@ -70,10 +77,6 @@ struct Call : Statement
 
     Argument Name;
     const uint16_t Magic = MAGIC_CALL;
-    const uint16_t SetParamMagic = MAGIC_SET_PARAM;
-    const uint16_t GetVarMagic = MAGIC_GET;
-    const uint16_t NumSetParamParams = 2;
-    const uint16_t NumGetVarParams = 1;
     ArgumentList Arguments;
 };
 
@@ -127,6 +130,17 @@ struct Scene : Subroutine
 {
     Scene(const Argument& Name, Block& Statements) : Subroutine(Name, Statements) {}
     virtual void Compile();
+};
+
+struct Assignment : Expression
+{
+    Assignment(Argument& Name, Expression& Rhs) : Name(Name), Rhs(Rhs) {}
+    virtual void Compile();
+
+    Argument Name;
+    Expression& Rhs;
+    const uint16_t Magic = MAGIC_SET;
+    const uint16_t NumParams = 1;
 };
 
 #endif

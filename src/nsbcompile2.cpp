@@ -42,6 +42,28 @@ void Node::Compile()
 
 void Argument::Compile()
 {
+    Node::Compile();
+    // Value
+    if (Type == ARG_VARIABLE)
+    {
+        Output.write((char*)&GetVarMagic, sizeof(uint16_t));
+        Output.write((char*)&NumGetVarParams, sizeof(uint16_t));
+    }
+    // Variable
+    else
+    {
+        const char* StrType = ArgumentTypes[Type];
+        uint32_t TypeSize = strlen(StrType);
+        Output.write((char*)&SetParamMagic, sizeof(uint16_t));
+        Output.write((char*)&NumSetParamParams, sizeof(uint16_t));
+        Output.write((char*)&TypeSize, sizeof(uint32_t));
+        Output.write(StrType, TypeSize);
+    }
+    CompileRaw();
+}
+
+void Argument::CompileRaw()
+{
     uint32_t Size = Data.size();
     Output.write((char*)&Size, sizeof(uint32_t));
     Output.write(Data.c_str(), Size);
@@ -53,26 +75,7 @@ void Call::Compile()
 
     // Parameters
     for (auto i = Arguments.begin(); i != Arguments.end(); ++i)
-    {
-        Node::Compile();
-        // Value
-        if ((*i)->Type == ARG_VARIABLE)
-        {
-            Output.write((char*)&GetVarMagic, sizeof(uint16_t));
-            Output.write((char*)&NumGetVarParams, sizeof(uint16_t));
-        }
-        // Variable
-        else
-        {
-            const char* Type = ArgumentTypes[(*i)->Type];
-            uint32_t TypeSize = strlen(Type);
-            Output.write((char*)&SetParamMagic, sizeof(uint16_t));
-            Output.write((char*)&NumSetParamParams, sizeof(uint16_t));
-            Output.write((char*)&TypeSize, sizeof(uint32_t));
-            Output.write(Type, TypeSize);
-        }
         (*i)->Compile();
-    }
 
     // Call
     Node::Compile();
@@ -88,11 +91,11 @@ void Call::Compile()
     {
         Output.write((char*)&Magic, sizeof(uint16_t));
         Output.write((char*)&NumParams, sizeof(uint16_t));
-        Name.Compile();
+        Name.CompileRaw();
     }
     // Arguments
     for (auto i = Arguments.begin(); i != Arguments.end(); ++i)
-        (*i)->Compile();
+        (*i)->CompileRaw();
 }
 
 void Block::Compile()
@@ -112,7 +115,7 @@ void Subroutine::CompilePrototype(uint16_t BeginMagic, uint32_t NumBeginParams)
     Node::Compile();
     Output.write((char*)&BeginMagic, sizeof(uint16_t));
     Output.write((char*)&NumBeginParams, sizeof(uint16_t));
-    Name.Compile();
+    Name.CompileRaw();
 }
 
 void Subroutine::Compile()
@@ -132,7 +135,7 @@ void Function::Compile()
     Name.Data = string("function.") + Name.Data;
     CompilePrototype(MAGIC_FUNCTION_BEGIN, Arguments.size() + 1);
     for (auto i = Arguments.begin(); i != Arguments.end(); ++i)
-        (*i)->Compile();
+        (*i)->CompileRaw();
     Subroutine::Compile();
     CompileReturn(MAGIC_FUNCTION_END);
 }
@@ -151,6 +154,15 @@ void Scene::Compile()
     CompilePrototype(MAGIC_SCENE_BEGIN, 1);
     Subroutine::Compile();
     CompileReturn(MAGIC_SCENE_END);
+}
+
+void Assignment::Compile()
+{
+    Rhs.Compile();
+    Node::Compile();
+    Output.write((char*)&Magic, sizeof(uint16_t));
+    Output.write((char*)&NumParams, sizeof(uint16_t));
+    Name.CompileRaw();
 }
 
 int main(int argc, char** argv)

@@ -14,6 +14,7 @@
     Block* block;
     Statement* stmt;
     Argument* arg;
+    Expression* expr;
     std::vector<Argument*>* argvec;
     std::string* string;
     int token;
@@ -26,6 +27,7 @@
 %type <argvec> func_args
 %type <block> program stmts block
 %type <stmt> stmt func_decl call
+%type <expr> expr
 
 %start program
 
@@ -38,7 +40,7 @@ stmts : stmt { $$ = new Block(); $$->Statements.push_back($<stmt>1); }
       | stmts stmt { $1->Statements.push_back($<stmt>2); }
       ;
 
-stmt : func_decl | call
+stmt : func_decl | call | expr
      ;
 
 block : TLBRACE stmts TRBRACE { $$ = $2; }
@@ -61,6 +63,10 @@ arg : TDOLLAR TIDENTIFIER { $$ = new Argument(string("$") + *$2, ARG_VARIABLE); 
       ;
 
 call : arg TLPAREN func_args TRPAREN TSEMICOLON { $$ = new Call(*$1, *$3); delete $3; }
+     ;
+
+expr : arg TEQUAL expr TSEMICOLON { $$ = new Assignment(*$<arg>1, *$3); }
+     | arg { $<arg>$ = $1; }
      ;
 
 %%
