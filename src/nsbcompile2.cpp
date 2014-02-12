@@ -47,9 +47,7 @@ void Argument::Compile()
 {
     // Value
     if (Type == ARG_VARIABLE)
-    {
         Node::Compile(GetVarMagic, NumGetVarParams);
-    }
     // Variable
     else
     {

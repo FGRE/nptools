@@ -51,9 +51,7 @@ struct Statement : Node
 
 struct Expression : Node
 {
-    virtual void Compile()
-    {
-    }
+    virtual void Compile() = 0;
 };
 
 struct Argument : Expression

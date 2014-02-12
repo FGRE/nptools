@@ -29,6 +29,7 @@ extern "C" int yywrap() { }
 "-"                     return TOKEN(TSUB);
 "/"                     return TOKEN(TDIV);
 "*"                     return TOKEN(TMUL);
+"//".*
 .                       printf("Unknown token!\n"); yyterminate();
 
 %%
