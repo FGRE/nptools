@@ -47,13 +47,13 @@ void Argument::Compile()
 {
     // Value
     if (Type == ARG_VARIABLE)
-        Node::Compile(GetVarMagic, NumGetVarParams);
+        Node::Compile(MAGIC_GET, 1);
     // Variable
     else
     {
         const char* StrType = ArgumentTypes[Type];
         uint32_t TypeSize = strlen(StrType);
-        Node::Compile(SetParamMagic, NumSetParamParams);
+        Node::Compile(MAGIC_SET_PARAM, 2);
         Output.write((char*)&TypeSize, sizeof(uint32_t));
         Output.write(StrType, TypeSize);
     }
@@ -81,7 +81,7 @@ void Call::Compile()
     // Script function
     else
     {
-        Node::Compile(Magic, NumParams);
+        Node::Compile(MAGIC_CALL, NumParams);
         Name.CompileRaw();
     }
     // Arguments
@@ -91,10 +91,10 @@ void Call::Compile()
 
 void Block::Compile()
 {
-    Node::Compile(BeginMagic, NumParams);
+    Node::Compile(MAGIC_SCOPE_BEGIN, 0);
     for (auto i = Statements.begin(); i != Statements.end(); ++i)
         (*i)->Compile();
-    Node::Compile(EndMagic, NumParams);
+    Node::Compile(MAGIC_SCOPE_END, 0);
 }
 
 void Subroutine::CompilePrototype(uint16_t BeginMagic, uint32_t NumBeginParams)
@@ -142,7 +142,7 @@ void Scene::Compile()
 void Assignment::Compile()
 {
     Rhs.Compile();
-    Node::Compile(Magic, NumParams);
+    Node::Compile(MAGIC_SET, 1);
     Name.CompileRaw();
 }
 

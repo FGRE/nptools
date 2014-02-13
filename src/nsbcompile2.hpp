@@ -67,10 +67,6 @@ struct Argument : Expression
     virtual void Compile();
 
     string Data;
-    const uint16_t SetParamMagic = MAGIC_SET_PARAM;
-    const uint16_t GetVarMagic = MAGIC_GET;
-    const uint16_t NumSetParamParams = 2;
-    const uint16_t NumGetVarParams = 1;
     ArgumentType Type; // Todo: CallArgument : Argument?
 };
 
@@ -80,7 +76,6 @@ struct Call : Statement
     virtual void Compile();
 
     Argument& Name;
-    const uint16_t Magic = MAGIC_CALL;
     ArgumentList Arguments;
 };
 
@@ -91,9 +86,6 @@ struct Block : Statement
     virtual void Compile();
 
     StatementList Statements;
-    const uint16_t BeginMagic = MAGIC_SCOPE_BEGIN;
-    const uint16_t EndMagic = MAGIC_SCOPE_END;
-    const uint16_t NumParams = 0;
 };
 
 struct Condition : Statement
@@ -147,8 +139,6 @@ struct Assignment : Expression
 
     Argument& Name;
     Expression& Rhs;
-    const uint16_t Magic = MAGIC_SET;
-    const uint16_t NumParams = 1;
 };
 
 struct BinaryOperator : Expression
