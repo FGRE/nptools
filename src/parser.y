@@ -22,12 +22,12 @@
 
 %token <string> TIDENTIFIER TFLOAT TINTEGER
 %token <token> TLPAREN TRPAREN TLBRACE TRBRACE TFUNCTION TSEMICOLON TDOLLAR TEQUAL TCOMMA TQUOTE TCHAPTER TSCENE
-%token <token> TADD TSUB TMUL TDIV
+%token <token> TADD TSUB TMUL TDIV TIF TWHILE TLESS TGREATER TEQUALEQUAL TNEQUAL TGEQUAL TLEQUAL TAND TOR TNOT
 
 %type <arg> arg 
 %type <argvec> func_args
 %type <block> program stmts block
-%type <stmt> stmt func_decl call
+%type <stmt> stmt func_decl call cond
 %type <expr> expr
 
 %left TPLUS TMINUS
@@ -44,7 +44,7 @@ stmts : stmt { $$ = new Block(); $$->Statements.push_back($<stmt>1); }
       | stmts stmt { $1->Statements.push_back($<stmt>2); }
       ;
 
-stmt : func_decl | call | expr
+stmt : func_decl | call | expr | cond
      ;
 
 block : TLBRACE stmts TRBRACE { $$ = $2; }
@@ -76,6 +76,19 @@ expr : arg TEQUAL expr TSEMICOLON { $$ = new Assignment(*$<arg>1, *$3); }
      | expr TDIV expr { $$ = new BinaryOperator(*$1, $2, *$3); }
      | expr TADD expr { $$ = new BinaryOperator(*$1, $2, *$3); }
      | expr TSUB expr { $$ = new BinaryOperator(*$1, $2, *$3); }
+     | expr TLESS expr { $$ = new BinaryOperator(*$1, $2, *$3); }
+     | expr TGREATER expr { $$ = new BinaryOperator(*$1, $2, *$3); }
+     | expr TEQUALEQUAL expr { $$ = new BinaryOperator(*$1, $2, *$3); }
+     | expr TNEQUAL expr { $$ = new BinaryOperator(*$1, $2, *$3); }
+     | expr TGEQUAL expr { $$ = new BinaryOperator(*$1, $2, *$3); }
+     | expr TLEQUAL expr { $$ = new BinaryOperator(*$1, $2, *$3); }
+     | expr TAND expr { $$ = new BinaryOperator(*$1, $2, *$3); }
+     | expr TOR expr { $$ = new BinaryOperator(*$1, $2, *$3); }
+     | TNOT expr { $$ = new UnaryOperator($1, *$2); }
+     ;
+
+cond : TIF TLPAREN expr TRPAREN block { $$ = new Condition(*$5, *$3, COND_IF); }
+     | TWHILE TLPAREN expr TRPAREN block { $$ = new Condition(*$5, *$3, COND_WHILE); }
      ;
 
 %%

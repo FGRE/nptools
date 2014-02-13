@@ -13,6 +13,8 @@ extern "C" int yywrap() { }
 "function"              return TOKEN(TFUNCTION);
 "chapter"               return TOKEN(TCHAPTER);
 "scene"                 return TOKEN(TSCENE);
+"if"                    return TOKEN(TIF);
+"while"                 return TOKEN(TWHILE);
 "\""                    return TOKEN(TQUOTE);
 [a-zA-Z_][a-zA-Z0-9_]*  SAVE_TOKEN; return TIDENTIFIER;
 [0-9]+\.[0-9]*          SAVE_TOKEN; return TFLOAT;
@@ -29,6 +31,15 @@ extern "C" int yywrap() { }
 "-"                     return TOKEN(TSUB);
 "/"                     return TOKEN(TDIV);
 "*"                     return TOKEN(TMUL);
+"<"                     return TOKEN(TLESS);
+">"                     return TOKEN(TGREATER);
+"=="                    return TOKEN(TEQUALEQUAL);
+"!="                    return TOKEN(TNEQUAL);
+">="                    return TOKEN(TGEQUAL);
+"<="                    return TOKEN(TLEQUAL);
+"&&"                    return TOKEN(TAND);
+"||"                    return TOKEN(TOR);
+"!"                     return TOKEN(TNOT);
 "//".*
 .                       printf("Unknown token!\n"); yyterminate();
 

@@ -38,6 +38,12 @@ enum ArgumentType
     ARG_FUNCTION
 };
 
+enum ConditionType
+{
+    COND_IF,
+    COND_WHILE
+};
+
 struct Node
 {
     virtual ~Node() {}
@@ -70,10 +76,10 @@ struct Argument : Expression
 
 struct Call : Statement
 {
-    Call(const Argument& Name, ArgumentList& Arguments) : Name(Name), Arguments(Arguments) {}
+    Call(Argument& Name, ArgumentList& Arguments) : Name(Name), Arguments(Arguments) {}
     virtual void Compile();
 
-    Argument Name;
+    Argument& Name;
     const uint16_t Magic = MAGIC_CALL;
     ArgumentList Arguments;
 };
@@ -90,12 +96,16 @@ struct Block : Statement
     const uint16_t NumParams = 0;
 };
 
-struct Condition : Block
+struct Condition : Statement
 {
-    virtual void Compile()
-    {
-        Block::Compile();
-    }
+    Condition(Block& ConditionBlock, Expression& Expr, ConditionType Type) : ConditionBlock(ConditionBlock), Expr(Expr), Type(Type) {}
+    virtual void Compile();
+
+    const uint16_t MagicIf = MAGIC_IF;
+    const uint16_t MagicWhile = MAGIC_WHILE;
+    Expression& Expr;
+    Block& ConditionBlock;
+    ConditionType Type;
 };
 
 struct Subroutine : Statement
@@ -153,7 +163,24 @@ struct BinaryOperator : Expression
     const uint16_t MagicSub = MAGIC_SUBSTRACT;
     const uint16_t MagicDiv = MAGIC_DIVIDE;
     const uint16_t MagicMul = 0; // UNK
-    const uint16_t NumParams = 0;
+    const uint16_t MagicLess = 0; // UNK
+    const uint16_t MagicGreater = 0; // UNK
+    const uint16_t MagicEqual = 0; // UNK
+    const uint16_t MagicNotEqual = 0; // UNK
+    const uint16_t MagicGreaterEqual = 0; // UNK
+    const uint16_t MagicLessEqual = 0; // UNK
+    const uint16_t MagicAnd = 0; // UNK
+    const uint16_t MagicOr = 0; // UNK
+};
+
+struct UnaryOperator : Expression
+{
+    UnaryOperator(int Op, Expression& Rhs) : Op(Op), Rhs(Rhs) {}
+    virtual void Compile();
+
+    int Op;
+    Expression& Rhs;
+    const uint16_t MagicNot = 0; // UNK
 };
 
 #endif

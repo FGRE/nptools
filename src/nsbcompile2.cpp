@@ -151,14 +151,47 @@ void BinaryOperator::Compile()
     Lhs.Compile();
     Rhs.Compile();
     uint16_t Magic;
+    // TODO: Pass magic directly from parser.y
     switch (Op)
     {
         case TADD: Magic = MagicAdd; break;
         case TSUB: Magic = MagicSub; break;
         case TMUL: Magic = MagicMul; break;
         case TDIV: Magic = MagicDiv; break;
+        case TLESS: Magic = MagicLess; break;
+        case TGREATER: Magic = MagicGreater; break;
+        case TEQUALEQUAL: Magic = MagicEqual; break;
+        case TNEQUAL: Magic = MagicNotEqual; break;
+        case TGEQUAL: Magic = MagicGreaterEqual; break;
+        case TLEQUAL: Magic = MagicLessEqual; break;
+        case TAND: Magic = MagicAnd; break;
+        case TOR: Magic = MagicOr; break;
     }
-    Node::Compile(Magic, NumParams);
+    Node::Compile(Magic, 0);
+}
+
+void UnaryOperator::Compile()
+{
+    Rhs.Compile();
+    uint16_t Magic;
+    switch (Op)
+    {
+        case TNOT: Magic = MagicNot; break;
+    }
+    Node::Compile(Magic, 0);
+}
+
+void Condition::Compile()
+{
+    Expr.Compile();
+    uint16_t Magic;
+    switch (Type)
+    {
+        case COND_IF: Magic = MagicIf; break;
+        case COND_WHILE: Magic = MagicWhile; break;
+    }
+    Node::Compile(Magic, 0);
+    ConditionBlock.Compile();
 }
 
 int main(int argc, char** argv)
