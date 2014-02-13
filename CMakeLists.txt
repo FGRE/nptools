@@ -1,10 +1,16 @@
 cmake_minimum_required(VERSION 2.8)
 project(nptools)
 
+set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules")
 find_package(Boost REQUIRED COMPONENTS system filesystem locale)
 find_package(ZLIB REQUIRED)
 find_package(FLEX REQUIRED)
 find_package(BISON REQUIRED)
+find_package(LIBUNSHIELD)
+if (NOT LIBUNSHIELD_FOUND)
+	message(FATAL_ERROR "Could not find libunshield")
+endif ()
+
 set(CMAKE_BUILD_TYPE Debug)
 
 add_definitions(-std=c++11)
