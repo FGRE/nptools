@@ -152,7 +152,7 @@ struct BinaryOperator : Expression
     const uint16_t MagicAdd = MAGIC_ADD;
     const uint16_t MagicSub = MAGIC_SUBSTRACT;
     const uint16_t MagicDiv = MAGIC_DIVIDE;
-    const uint16_t MagicMul = 0; // UNK
+    const uint16_t MagicMul = MAGIC_MULTIPLY;
     const uint16_t MagicLess = 0; // UNK
     const uint16_t MagicGreater = 0; // UNK
     const uint16_t MagicEqual = 0; // UNK
