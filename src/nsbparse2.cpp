@@ -135,7 +135,7 @@ int main(int argc, char** argv)
                 BinaryOperator("!=");
                 break;
             case MAGIC_LOGICAL_NOT:
-                BinaryOperator("!");
+                Params[Params.size() - 1] = string("!") + Params[Params.size() - 1];
                 break;
             case MAGIC_SET:
                 Indent();
