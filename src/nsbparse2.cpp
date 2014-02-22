@@ -163,6 +163,7 @@ int main(int argc, char** argv)
                 Params[Params.size() - 1] = string("-") + Params[Params.size() - 1];
                 break;
             case MAGIC_PLACEHOLDER_PARAM:
+            case MAGIC_LABEL:
                 break;
             default:
                 Indent();
