@@ -159,6 +159,11 @@ int main(int argc, char** argv)
             case MAGIC_PARSE_TEXT:
                 Output << pLine->Params[2] << '\n';
                 break;
+            case MAGIC_NEGATIVE:
+                Params[Params.size() - 1] = string("-") + Params[Params.size() - 1];
+                break;
+            case MAGIC_PLACEHOLDER_PARAM:
+                break;
             default:
                 Indent();
                 Output << NsbFile::StringifyMagic(pLine->Magic);
