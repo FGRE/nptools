@@ -164,6 +164,7 @@ int main(int argc, char** argv)
                 break;
             case MAGIC_PLACEHOLDER_PARAM:
             case MAGIC_LABEL:
+            case MAGIC_LOOP_JUMP:
                 break;
             default:
                 Indent();
