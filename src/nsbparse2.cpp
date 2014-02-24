@@ -151,12 +151,14 @@ int main(int argc, char** argv)
                 Indent();
                 Output << "if";
                 WriteParams(Params);
+                Params.clear();
                 Output << '\n';
                 break;
             case MAGIC_WHILE:
                 Indent();
                 Output << "while";
                 WriteParams(Params);
+                Params.clear();
                 Output << '\n';
                 break;
             case MAGIC_PARSE_TEXT:
