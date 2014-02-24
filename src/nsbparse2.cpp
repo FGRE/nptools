@@ -31,7 +31,7 @@ void Indent()
         Output << "    ";
 }
 
-void WriteParams()
+void WriteParams(vector<string>& Params)
 {
     Output << "(";
     for (int i = 0; i < Params.size(); ++i)
@@ -89,14 +89,17 @@ int main(int argc, char** argv)
             case MAGIC_CALL:
                 Indent();
                 Output << pLine->Params[0];
-                WriteParams();
+                WriteParams(Params);
                 break;
             case MAGIC_FUNCTION_BEGIN:
+            {
                 pLine->Params[0][8] = ' ';
                 Output << pLine->Params[0];
-                WriteParams();
+                pLine->Params.erase(pLine->Params.begin());
+                WriteParams(pLine->Params);
                 Output << '\n';
                 break;
+            }
             case MAGIC_SCENE_BEGIN:
                 pLine->Params[0][5] = ' ';
                 Output << pLine->Params[0] << '\n';
@@ -147,13 +150,13 @@ int main(int argc, char** argv)
             case MAGIC_IF:
                 Indent();
                 Output << "if";
-                WriteParams();
+                WriteParams(Params);
                 Output << '\n';
                 break;
             case MAGIC_WHILE:
                 Indent();
                 Output << "while";
-                WriteParams();
+                WriteParams(Params);
                 Output << '\n';
                 break;
             case MAGIC_PARSE_TEXT:
@@ -173,7 +176,7 @@ int main(int argc, char** argv)
             default:
                 Indent();
                 Output << NsbFile::StringifyMagic(pLine->Magic);
-                WriteParams();
+                WriteParams(Params);
                 break;
         }
     }
