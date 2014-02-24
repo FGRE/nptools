@@ -166,6 +166,10 @@ int main(int argc, char** argv)
             case MAGIC_LABEL:
             case MAGIC_LOOP_JUMP:
                 break;
+            case MAGIC_INCREMENT:
+                Indent();
+                Output << Params.back() << "++";
+                break;
             default:
                 Indent();
                 Output << NsbFile::StringifyMagic(pLine->Magic);

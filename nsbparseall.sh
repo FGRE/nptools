@@ -1,4 +1,4 @@
 #!/bin/bash
 for file in nss/*.nsb ; do
-	./nsbparse $1 "$file"
+	./nsbparse2 $1 "$file" "${file:4}"
 done
