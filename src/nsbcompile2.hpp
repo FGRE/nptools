@@ -143,34 +143,21 @@ struct Assignment : Expression
 
 struct BinaryOperator : Expression
 {
-    BinaryOperator(Expression& Lhs, int Op, Expression& Rhs) : Lhs(Lhs), Op(Op), Rhs(Rhs) {}
+    BinaryOperator(Expression& Lhs, uint16_t Op, Expression& Rhs) : Lhs(Lhs), Magic(Op), Rhs(Rhs) {}
     virtual void Compile();
 
-    int Op;
+    uint16_t Magic;
     Expression& Lhs;
     Expression& Rhs;
-    const uint16_t MagicAdd = MAGIC_ADD;
-    const uint16_t MagicSub = MAGIC_SUBSTRACT;
-    const uint16_t MagicDiv = MAGIC_DIVIDE;
-    const uint16_t MagicMul = MAGIC_MULTIPLY;
-    const uint16_t MagicLess = MAGIC_LOGICAL_LESS;
-    const uint16_t MagicGreater = MAGIC_LOGICAL_GREATER;
-    const uint16_t MagicEqual = MAGIC_LOGICAL_EQUAL;
-    const uint16_t MagicNotEqual = MAGIC_LOGICAL_NOT_EQUAL;
-    const uint16_t MagicGreaterEqual = 0; // UNK
-    const uint16_t MagicLessEqual = 0; // UNK
-    const uint16_t MagicAnd = 0; // UNK
-    const uint16_t MagicOr = 0; // UNK
 };
 
 struct UnaryOperator : Expression
 {
-    UnaryOperator(int Op, Expression& Rhs) : Op(Op), Rhs(Rhs) {}
+    UnaryOperator(int Op, Expression& Rhs) : Magic(Op), Rhs(Rhs) {}
     virtual void Compile();
 
-    int Op;
+    uint16_t Magic;
     Expression& Rhs;
-    const uint16_t MagicNot = 0; // UNK
 };
 
 #endif

@@ -72,19 +72,19 @@ call : arg TLPAREN func_args TRPAREN TSEMICOLON { $$ = new Call(*$1, *$3); delet
 
 expr : arg TEQUAL expr TSEMICOLON { $$ = new Assignment(*$<arg>1, *$3); }
      | arg { $<arg>$ = $1; }
-     | expr TMUL expr { $$ = new BinaryOperator(*$1, $2, *$3); }
-     | expr TDIV expr { $$ = new BinaryOperator(*$1, $2, *$3); }
-     | expr TADD expr { $$ = new BinaryOperator(*$1, $2, *$3); }
-     | expr TSUB expr { $$ = new BinaryOperator(*$1, $2, *$3); }
-     | expr TLESS expr { $$ = new BinaryOperator(*$1, $2, *$3); }
-     | expr TGREATER expr { $$ = new BinaryOperator(*$1, $2, *$3); }
-     | expr TEQUALEQUAL expr { $$ = new BinaryOperator(*$1, $2, *$3); }
-     | expr TNEQUAL expr { $$ = new BinaryOperator(*$1, $2, *$3); }
-     | expr TGEQUAL expr { $$ = new BinaryOperator(*$1, $2, *$3); }
-     | expr TLEQUAL expr { $$ = new BinaryOperator(*$1, $2, *$3); }
-     | expr TAND expr { $$ = new BinaryOperator(*$1, $2, *$3); }
-     | expr TOR expr { $$ = new BinaryOperator(*$1, $2, *$3); }
-     | TNOT expr { $$ = new UnaryOperator($1, *$2); }
+     | expr TMUL expr { $$ = new BinaryOperator(*$1, MAGIC_MULTIPLY, *$3); }
+     | expr TDIV expr { $$ = new BinaryOperator(*$1, MAGIC_DIVIDE, *$3); }
+     | expr TADD expr { $$ = new BinaryOperator(*$1, MAGIC_ADD, *$3); }
+     | expr TSUB expr { $$ = new BinaryOperator(*$1, MAGIC_SUBSTRACT, *$3); }
+     | expr TLESS expr { $$ = new BinaryOperator(*$1, MAGIC_LOGICAL_LESS, *$3); }
+     | expr TGREATER expr { $$ = new BinaryOperator(*$1, MAGIC_LOGICAL_GREATER, *$3); }
+     | expr TEQUALEQUAL expr { $$ = new BinaryOperator(*$1, MAGIC_LOGICAL_EQUAL, *$3); }
+     | expr TNEQUAL expr { $$ = new BinaryOperator(*$1, MAGIC_LOGICAL_NOT_EQUAL, *$3); }
+     | expr TGEQUAL expr { $$ = new BinaryOperator(*$1, 0, *$3); }
+     | expr TLEQUAL expr { $$ = new BinaryOperator(*$1, 0, *$3); }
+     | expr TAND expr { $$ = new BinaryOperator(*$1, 0, *$3); }
+     | expr TOR expr { $$ = new BinaryOperator(*$1, 0, *$3); }
+     | TNOT expr { $$ = new UnaryOperator(MAGIC_LOGICAL_NOT, *$2); }
      ;
 
 cond : TIF TLPAREN expr TRPAREN block { $$ = new Condition(*$5, *$3, COND_IF); }
