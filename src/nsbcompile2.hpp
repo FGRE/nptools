@@ -38,12 +38,6 @@ enum ArgumentType
     ARG_FUNCTION
 };
 
-enum ConditionType
-{
-    COND_IF,
-    COND_WHILE
-};
-
 struct Node
 {
     virtual ~Node() {}
@@ -90,14 +84,12 @@ struct Block : Statement
 
 struct Condition : Statement
 {
-    Condition(Block& ConditionBlock, Expression& Expr, ConditionType Type) : ConditionBlock(ConditionBlock), Expr(Expr), Type(Type) {}
+    Condition(Block& ConditionBlock, Expression& Expr, uint16_t Magic) : ConditionBlock(ConditionBlock), Expr(Expr), Magic(Magic) {}
     virtual void Compile();
 
-    const uint16_t MagicIf = MAGIC_IF;
-    const uint16_t MagicWhile = MAGIC_WHILE;
+    uint16_t Magic;
     Expression& Expr;
     Block& ConditionBlock;
-    ConditionType Type;
 };
 
 struct Subroutine : Statement

@@ -162,12 +162,6 @@ void UnaryOperator::Compile()
 void Condition::Compile()
 {
     Expr.Compile();
-    uint16_t Magic;
-    switch (Type)
-    {
-        case COND_IF: Magic = MagicIf; break;
-        case COND_WHILE: Magic = MagicWhile; break;
-    }
     Node::Compile(Magic, 0);
     ConditionBlock.Compile();
 }

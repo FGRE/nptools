@@ -87,8 +87,8 @@ expr : arg TEQUAL expr TSEMICOLON { $$ = new Assignment(*$<arg>1, *$3); }
      | TNOT expr { $$ = new UnaryOperator(MAGIC_LOGICAL_NOT, *$2); }
      ;
 
-cond : TIF TLPAREN expr TRPAREN block { $$ = new Condition(*$5, *$3, COND_IF); }
-     | TWHILE TLPAREN expr TRPAREN block { $$ = new Condition(*$5, *$3, COND_WHILE); }
+cond : TIF TLPAREN expr TRPAREN block { $$ = new Condition(*$5, *$3, MAGIC_IF); }
+     | TWHILE TLPAREN expr TRPAREN block { $$ = new Condition(*$5, *$3, MAGIC_WHILE); }
      ;
 
 %%
