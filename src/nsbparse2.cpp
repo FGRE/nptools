@@ -179,6 +179,10 @@ int main(int argc, char** argv)
             case MAGIC_GET_SCRIPT_NAME:
                 Params.push_back(string(NsbFile::StringifyMagic(pLine->Magic)) + GenParams(pLine->Params));
                 break;
+            case MAGIC_RETURN:
+                Indent();
+                Output << "return;\n";
+                break;
             default:
                 Indent();
                 Output << NsbFile::StringifyMagic(pLine->Magic) << GenParams(Params);
