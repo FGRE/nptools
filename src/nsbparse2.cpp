@@ -175,6 +175,12 @@ int main(int argc, char** argv)
                 Indent();
                 Output << Params.back() << "++";
                 break;
+            case MAGIC_CALL_SCENE:
+                Indent();
+                Output << NsbFile::StringifyMagic(pLine->Magic);
+                WriteParams(pLine->Params);
+                Output << ";\n";
+                break;
             default:
                 Indent();
                 Output << NsbFile::StringifyMagic(pLine->Magic);
