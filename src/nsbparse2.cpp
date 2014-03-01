@@ -181,6 +181,9 @@ int main(int argc, char** argv)
                 WriteParams(pLine->Params);
                 Output << ";\n";
                 break;
+            case MAGIC_GET_SCRIPT_NAME:
+                Params.push_back(string(NsbFile::StringifyMagic(pLine->Magic)) + "()");
+                break;
             default:
                 Indent();
                 Output << NsbFile::StringifyMagic(pLine->Magic);
