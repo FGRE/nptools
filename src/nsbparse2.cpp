@@ -31,15 +31,16 @@ void Indent()
         Output << "    ";
 }
 
-void WriteParams(vector<string>& Params)
+string GenParams(vector<string>& Params)
 {
-    Output << "(";
+    string ParamList = "(";
     for (int i = 0; i < Params.size(); ++i)
     {
-        Output << Params[i];
-        Output << ((i != (Params.size() - 1)) ? ", " : "");
+        ParamList += Params[i];
+        ParamList += ((i != (Params.size() - 1)) ? ", " : "");
     }
-    Output << ")";
+    ParamList += ")";
+    return ParamList;
 }
 
 void BinaryOperator(string Op)
@@ -88,16 +89,14 @@ int main(int argc, char** argv)
                 break;
             case MAGIC_CALL:
                 Indent();
-                Output << pLine->Params[0];
-                WriteParams(Params);
+                Output << pLine->Params[0] << GenParams(Params);
                 break;
             case MAGIC_FUNCTION_BEGIN:
             {
                 pLine->Params[0][8] = ' ';
                 Output << pLine->Params[0];
                 pLine->Params.erase(pLine->Params.begin());
-                WriteParams(pLine->Params);
-                Output << '\n';
+                Output << GenParams(pLine->Params) << '\n';
                 break;
             }
             case MAGIC_SCENE_BEGIN:
@@ -149,17 +148,13 @@ int main(int argc, char** argv)
                 break;
             case MAGIC_IF:
                 Indent();
-                Output << "if";
-                WriteParams(Params);
+                Output << "if " << GenParams(Params) << '\n';
                 Params.clear();
-                Output << '\n';
                 break;
             case MAGIC_WHILE:
                 Indent();
-                Output << "while";
-                WriteParams(Params);
+                Output << "while " << GenParams(Params) << '\n';
                 Params.clear();
-                Output << '\n';
                 break;
             case MAGIC_PARSE_TEXT:
                 Output << pLine->Params[2] << '\n';
@@ -177,17 +172,15 @@ int main(int argc, char** argv)
                 break;
             case MAGIC_CALL_SCENE:
                 Indent();
-                Output << NsbFile::StringifyMagic(pLine->Magic);
-                WriteParams(pLine->Params);
-                Output << ";\n";
+                Output << NsbFile::StringifyMagic(pLine->Magic) << GenParams(pLine->Params) << ";\n";
                 break;
+            case MAGIC_GET_MOVIE_TIME:
             case MAGIC_GET_SCRIPT_NAME:
-                Params.push_back(string(NsbFile::StringifyMagic(pLine->Magic)) + "()");
+                Params.push_back(string(NsbFile::StringifyMagic(pLine->Magic)) + GenParams(pLine->Params));
                 break;
             default:
                 Indent();
-                Output << NsbFile::StringifyMagic(pLine->Magic);
-                WriteParams(Params);
+                Output << NsbFile::StringifyMagic(pLine->Magic) << GenParams(Params);
                 break;
         }
     }
