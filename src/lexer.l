@@ -9,6 +9,7 @@ extern "C" int yywrap() { }
 
 %%
 
+"<PRE"(.|[ \t\v\n])*"</PRE>" SAVE_TOKEN; return TXML;
 [ \t\n]                 ;
 "function"              return TOKEN(TFUNCTION);
 "chapter"               return TOKEN(TCHAPTER);

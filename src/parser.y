@@ -20,7 +20,7 @@
     int token;
 }
 
-%token <string> TIDENTIFIER TFLOAT TINTEGER
+%token <string> TIDENTIFIER TFLOAT TINTEGER TXML
 %token <token> TLPAREN TRPAREN TLBRACE TRBRACE TFUNCTION TSEMICOLON TDOLLAR TEQUAL TCOMMA TQUOTE TCHAPTER TSCENE
 %token <token> TADD TSUB TMUL TDIV TIF TWHILE TLESS TGREATER TEQUALEQUAL TNEQUAL TGEQUAL TLEQUAL TAND TOR TNOT
 
@@ -68,6 +68,14 @@ arg : TDOLLAR TIDENTIFIER { $$ = new Argument(string("$") + *$2, ARG_VARIABLE); 
       ;
 
 call : arg TLPAREN func_args TRPAREN TSEMICOLON { $$ = new Call(*$1, *$3); delete $3; }
+     | TXML {
+               ArgumentList Args;
+               Args.push_back(new Argument("TODO", ARG_STRING));
+               Args.push_back(new Argument("TODO", ARG_STRING));
+               Args.push_back(new Argument(*$1, ARG_STRING));
+               Argument* Arg = new Argument("ParseText", ARG_FUNCTION);
+               $$ = new Call(*Arg, Args);
+            }
      ;
 
 expr : arg TEQUAL expr TSEMICOLON { $$ = new Assignment(*$<arg>1, *$3); }

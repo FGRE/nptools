@@ -18,15 +18,19 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
+#include <boost/locale.hpp>
 #include "nsbcompile2.hpp"
 #include "nsbfile.hpp"
 #include "parser.hpp"
+using namespace boost::locale;
+using namespace boost::locale::conv;
 
 class Block;
 extern Block* pRoot;
 extern int yyparse();
 static uint32_t Counter = 1;
 static ofstream Output;
+static locale loc = generator().generate("ja_JP.SHIFT-JIS");
 
 const char* ArgumentTypes[] =
 {
@@ -34,6 +38,12 @@ const char* ArgumentTypes[] =
     "STRING",
     "FLOAT"
 };
+
+void WriteSJIS(string Data)
+{
+    Data = from_utf<char>(Data.c_str(), Data.c_str() + Data.size(), loc);
+    Output.write(Data.c_str(), Data.size());
+}
 
 void Node::Compile(uint16_t Magic, uint16_t NumParams)
 {
@@ -64,23 +74,26 @@ void Argument::CompileRaw()
 {
     uint32_t Size = Data.size();
     Output.write((char*)&Size, sizeof(uint32_t));
-    Output.write(Data.c_str(), Size);
+    WriteSJIS(Data);
 }
 
 void Call::Compile()
 {
-    uint16_t NumParams = Arguments.size() + 1;
+    uint16_t NumParams = Arguments.size();
+    uint32_t BuiltinMagic = NsbFile::MagicifyString(Name.Data.c_str());
 
     // Parameters
-    for (auto i = Arguments.begin(); i != Arguments.end(); ++i)
-        (*i)->Compile();
+    if (BuiltinMagic != MAGIC_PARSE_TEXT)
+        for (auto i = Arguments.begin(); i != Arguments.end(); ++i)
+            (*i)->Compile();
 
     // Builtin function
-    if (uint32_t BuiltinMagic = NsbFile::MagicifyString(Name.Data.c_str()))
+    if (BuiltinMagic != 0)
         Node::Compile(BuiltinMagic, NumParams);
     // Script function
     else
     {
+        NumParams += 1;
         Node::Compile(MAGIC_CALL, NumParams);
         Name.CompileRaw();
     }
