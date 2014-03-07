@@ -176,6 +176,8 @@ int main(int argc, char** argv)
                 Output << NsbFile::StringifyMagic(pLine->Magic) << GenParams(pLine->Params) << ";\n";
                 break;
             // Builtins which return value
+            case MAGIC_UNK140:
+            case MAGIC_UNK184:
             case MAGIC_TIME:
             case MAGIC_GET_MOVIE_TIME:
             case MAGIC_GET_SCRIPT_NAME:
