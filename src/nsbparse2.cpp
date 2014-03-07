@@ -175,6 +175,8 @@ int main(int argc, char** argv)
                 Indent();
                 Output << NsbFile::StringifyMagic(pLine->Magic) << GenParams(pLine->Params) << ";\n";
                 break;
+            // Builtins which return value
+            case MAGIC_TIME:
             case MAGIC_GET_MOVIE_TIME:
             case MAGIC_GET_SCRIPT_NAME:
                 Params.push_back(string(NsbFile::StringifyMagic(pLine->Magic)) + GenParams(pLine->Params));
