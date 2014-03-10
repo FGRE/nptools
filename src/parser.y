@@ -90,8 +90,8 @@ expr : arg TEQUAL expr TSEMICOLON { $$ = new Assignment(*$<arg>1, *$3); }
      | expr TNEQUAL expr { $$ = new BinaryOperator(*$1, MAGIC_LOGICAL_NOT_EQUAL, *$3); }
      | expr TGEQUAL expr { $$ = new BinaryOperator(*$1, MAGIC_LOGICAL_GREATER_EQUAL, *$3); }
      | expr TLEQUAL expr { $$ = new BinaryOperator(*$1, MAGIC_LOGICAL_LESS_EQUAL, *$3); }
-     | expr TAND expr { $$ = new BinaryOperator(*$1, 0, *$3); }
-     | expr TOR expr { $$ = new BinaryOperator(*$1, 0, *$3); }
+     | expr TAND expr { $$ = new BinaryOperator(*$1, MAGIC_LOGICAL_AND, *$3); }
+     | expr TOR expr { $$ = new BinaryOperator(*$1, MAGIC_LOGICAL_OR, *$3); }
      | TNOT expr { $$ = new UnaryOperator(MAGIC_LOGICAL_NOT, *$2); }
      ;
 

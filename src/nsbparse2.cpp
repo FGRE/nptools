@@ -142,6 +142,12 @@ int main(int argc, char** argv)
             case MAGIC_LOGICAL_LESS_EQUAL:
                 BinaryOperator("<=");
                 break;
+            case MAGIC_LOGICAL_AND:
+                BinaryOperator("&&");
+                break;
+            case MAGIC_LOGICAL_OR:
+                BinaryOperator("||");
+                break;
             case MAGIC_LOGICAL_NOT:
                 Params[Params.size() - 1] = string("!") + Params[Params.size() - 1];
                 break;
