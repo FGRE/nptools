@@ -136,6 +136,9 @@ int main(int argc, char** argv)
             case MAGIC_LOGICAL_NOT_EQUAL:
                 BinaryOperator("!=");
                 break;
+            case MAGIC_LOGICAL_GREATER_EQUAL:
+                BinaryOperator(">=");
+                break;
             case MAGIC_LOGICAL_NOT:
                 Params[Params.size() - 1] = string("!") + Params[Params.size() - 1];
                 break;
