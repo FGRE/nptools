@@ -17,6 +17,7 @@ extern "C" int yywrap() { }
 "scene"                 return TOKEN(TSCENE);
 "if"                    return TOKEN(TIF);
 "while"                 return TOKEN(TWHILE);
+"return"                return TOKEN(TRETURN);
 "\""                    return TOKEN(TQUOTE);
 [a-zA-Z_][a-zA-Z0-9_]*  SAVE_TOKEN; return TIDENTIFIER;
 [0-9]+\.[0-9]*          SAVE_TOKEN; return TFLOAT;
