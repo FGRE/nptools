@@ -3,6 +3,7 @@
 #include <cstring>
 #include <zlib.h>
 #include <sys/stat.h>
+#include <boost/algorithm/string/replace.hpp>
 #include <boost/locale.hpp>
 using namespace boost::locale;
 using namespace boost::locale::conv;
@@ -568,6 +569,7 @@ int main(int argc, char** argv)
         fread(&NPAEntry[i].origsize,1,4,infile);
 
         std::string utfPath = to_utf<char>(NPAEntry[i].filename, strlen(NPAEntry[i].filename) + NPAEntry[i].filename, loc);
+        boost::replace_all(utfPath, "¥", "/");
 
         printf("%04d: %-50s 0x%08X [%08X]\n",i,utfPath.c_str(), NPAEntry[i].offset,NPAEntry[i].compsize);
 
