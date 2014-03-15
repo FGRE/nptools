@@ -17,7 +17,7 @@
  * */
 #include <iostream>
 #include <fstream>
-#include "nsbfile.hpp"
+#include "scriptfile.hpp"
 #include "nsbmagic.hpp"
 using namespace std;
 
@@ -57,7 +57,7 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    NsbFile Script(argv[1]);
+    ScriptFile Script(argv[1]);
     Output.open(argv[2]);
 
     while (Line* pLine = Script.GetNextLine())
@@ -185,7 +185,7 @@ int main(int argc, char** argv)
             case MAGIC_CALL_CHAPTER:
             case MAGIC_CALL_SCENE:
                 Indent();
-                Output << NsbFile::StringifyMagic(pLine->Magic) << GenParams(pLine->Params) << ";\n";
+                Output << Nsb::StringifyMagic(pLine->Magic) << GenParams(pLine->Params) << ";\n";
                 break;
             // Builtins which return value
             case MAGIC_UNK140:
@@ -193,7 +193,7 @@ int main(int argc, char** argv)
             case MAGIC_TIME:
             case MAGIC_GET_MOVIE_TIME:
             case MAGIC_GET_SCRIPT_NAME:
-                Params.push_back(string(NsbFile::StringifyMagic(pLine->Magic)) + GenParams(pLine->Params));
+                Params.push_back(string(Nsb::StringifyMagic(pLine->Magic)) + GenParams(pLine->Params));
                 break;
             case MAGIC_RETURN:
                 Indent();
@@ -201,7 +201,7 @@ int main(int argc, char** argv)
                 break;
             default:
                 Indent();
-                Output << NsbFile::StringifyMagic(pLine->Magic) << GenParams(Params);
+                Output << Nsb::StringifyMagic(pLine->Magic) << GenParams(Params);
                 break;
         }
     }

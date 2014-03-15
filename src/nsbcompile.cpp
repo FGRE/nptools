@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * */
-#include "nsbfile.hpp"
+#include "scriptfile.hpp"
 #include "nsbmagic.hpp"
 
 #include <iostream>
@@ -58,7 +58,7 @@ int main(int argc, char** argv)
         ++Entry;
 
         SLine[it] = 0;
-        if (uint16_t Magic = NsbFile::MagicifyString(SLine.c_str()))
+        if (uint16_t Magic = Nsb::MagicifyString(SLine.c_str()))
         {
             Binary.write((char*)&Magic, sizeof(uint16_t));
             Binary.write((char*)&NumParams, sizeof(uint16_t));

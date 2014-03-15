@@ -15,9 +15,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * */
-#include "nsbfile.hpp"
+#include "scriptfile.hpp"
 #include "nsbmagic.hpp"
-#include "mapfile.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -57,7 +56,7 @@ int main(int argc, char** argv)
     Output[Output.size() - 1] = 's';
     Output = Output.substr(Output.find_last_of("/") + 1);
 
-    NsbFile Script(argv[PrintLineNumbers ? 2 : 1]);
+    ScriptFile Script(argv[PrintLineNumbers ? 2 : 1]);
     std::ofstream File(Output);
     int indent = -1;
     while (Line* pLine = Script.GetNextLine())
@@ -67,7 +66,7 @@ int main(int argc, char** argv)
         if (PrintLineNumbers)
             File << std::setfill('0') << std::setw(5) << Script.GetNextLineEntry() - 1 << " ";
 
-        if (!NsbFile::IsValidMagic(pLine->Magic))
+        if (!Nsb::IsValidMagic(pLine->Magic))
         {
             std::cout << "Unknown magic: " << std::hex << pLine->Magic << std::dec << std::endl;
             continue;
@@ -83,20 +82,11 @@ int main(int argc, char** argv)
         if (pLine->Magic == MAGIC_CALL || pLine->Magic == MAGIC_FUNCTION_BEGIN)
             File << pLine->Params[i++];
         else
-            File << NsbFile::StringifyMagic(pLine->Magic);
+            File << Nsb::StringifyMagic(pLine->Magic);
 
         File << "(";
         for (; i < pLine->Params.size(); ++i)
             File << pLine->Params[i] << ((i != (pLine->Params.size() - 1)) ? ", " : "");
         File << ");\n";
     }
-
-    // Open Map file
-    std::strcpy(&argv[PrintLineNumbers ? 2 : 1][std::strlen(argv[PrintLineNumbers ? 2 : 1]) - 3], "map");
-    MapFile MFile(argv[PrintLineNumbers ? 2 : 1]);
-    std::strcpy(&Output[Output.size() - 3], "map");
-    std::ofstream MapOutput(Output);
-
-    while (MapLine* pLine = MFile.GetNextLine())
-        MapOutput << pLine->Label << '\n';
 }

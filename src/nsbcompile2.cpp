@@ -20,7 +20,7 @@
 #include <cstring>
 #include <boost/locale.hpp>
 #include "nsbcompile2.hpp"
-#include "nsbfile.hpp"
+#include "scriptfile.hpp"
 #include "parser.hpp"
 using namespace boost::locale;
 using namespace boost::locale::conv;
@@ -80,7 +80,7 @@ void Argument::CompileRaw()
 void Call::Compile()
 {
     uint16_t NumParams = Arguments.size();
-    uint32_t BuiltinMagic = NsbFile::MagicifyString(Name.Data.c_str());
+    uint32_t BuiltinMagic = Nsb::MagicifyString(Name.Data.c_str());
 
     // Parameters
     if (BuiltinMagic != MAGIC_PARSE_TEXT)
