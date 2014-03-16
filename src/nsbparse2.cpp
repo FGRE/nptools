@@ -175,7 +175,7 @@ int main(int argc, char** argv)
                 Params[Params.size() - 1] = string("-") + Params[Params.size() - 1];
                 break;
             case MAGIC_PLACEHOLDER_PARAM:
-            case MAGIC_LABEL:
+            case MAGIC_JUMP: // TODO: Check for else/else if
             case MAGIC_LOOP_JUMP:
                 break;
             case MAGIC_INCREMENT:
