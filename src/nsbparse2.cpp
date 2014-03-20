@@ -168,6 +168,11 @@ int main(int argc, char** argv)
                 Output << "while " << GenParams(Params) << '\n';
                 Params.clear();
                 break;
+            case MAGIC_BREAK:
+                Indent();
+                Output << "break;\n";
+                Params.clear();
+                break;
             case MAGIC_PARSE_TEXT:
                 Output << pLine->Params[2] << '\n';
                 break;
@@ -188,12 +193,14 @@ int main(int argc, char** argv)
                 Output << Nsb::StringifyMagic(pLine->Magic) << GenParams(pLine->Params) << ";\n";
                 break;
             // Builtins which return value
+            case MAGIC_EXIST_SAVE:
             case MAGIC_UNK140:
             case MAGIC_UNK184:
             case MAGIC_TIME:
             case MAGIC_GET_MOVIE_TIME:
             case MAGIC_GET_SCRIPT_NAME:
                 Params.push_back(string(Nsb::StringifyMagic(pLine->Magic)) + GenParams(pLine->Params));
+                Params.clear();
                 break;
             case MAGIC_RETURN:
                 Indent();
