@@ -179,9 +179,11 @@ int main(int argc, char** argv)
             case MAGIC_NEGATIVE:
                 Params[Params.size() - 1] = string("-") + Params[Params.size() - 1];
                 break;
+            // Currently ignored builtins
             case MAGIC_PLACEHOLDER_PARAM:
             case MAGIC_JUMP: // TODO: Check for else/else if
-            case MAGIC_LOOP_JUMP:
+            case MAGIC_WHILE_END:
+            case MAGIC_CASE_END:
                 break;
             case MAGIC_INCREMENT:
                 Indent();
@@ -194,13 +196,21 @@ int main(int argc, char** argv)
                 break;
             // Builtins which return value
             case MAGIC_EXIST_SAVE:
+                Params.clear();
             case MAGIC_UNK140:
             case MAGIC_UNK184:
             case MAGIC_TIME:
             case MAGIC_GET_MOVIE_TIME:
             case MAGIC_GET_SCRIPT_NAME:
                 Params.push_back(string(Nsb::StringifyMagic(pLine->Magic)) + GenParams(pLine->Params));
-                Params.clear();
+                break;
+            case MAGIC_SELECT:
+                Indent();
+                Output << "select\n";
+                break;
+            case MAGIC_CASE_BEGIN:
+                Indent();
+                Output << "case " << pLine->Params[0] << ":\n";
                 break;
             case MAGIC_RETURN:
                 Indent();
