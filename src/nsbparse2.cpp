@@ -196,7 +196,7 @@ int main(int argc, char** argv)
                 break;
             // Builtins which return value
             case MAGIC_EXIST_SAVE:
-                Params.clear();
+                Params.resize(Params.size() - 1);
             case MAGIC_UNK140:
             case MAGIC_UNK184:
             case MAGIC_TIME:
