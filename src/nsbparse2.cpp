@@ -198,7 +198,7 @@ int main(int argc, char** argv)
             case MAGIC_EXIST_SAVE:
             case MAGIC_FORMAT:
             case MAGIC_UNK140:
-            case MAGIC_UNK173:
+            case MAGIC_READ_FILE:
             case MAGIC_UNK184:
             case MAGIC_TIME:
             case MAGIC_GET_MOVIE_TIME:
