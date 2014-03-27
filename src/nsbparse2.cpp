@@ -196,12 +196,14 @@ int main(int argc, char** argv)
                 break;
             // Builtins which return value
             case MAGIC_EXIST_SAVE:
-                Params.resize(Params.size() - 1);
+            case MAGIC_FORMAT:
             case MAGIC_UNK140:
+            case MAGIC_UNK173:
             case MAGIC_UNK184:
             case MAGIC_TIME:
             case MAGIC_GET_MOVIE_TIME:
             case MAGIC_GET_SCRIPT_NAME:
+                Params.resize(Params.size() - pLine->Params.size());
                 Params.push_back(string(Nsb::StringifyMagic(pLine->Magic)) + GenParams(pLine->Params));
                 break;
             case MAGIC_SELECT:
