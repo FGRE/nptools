@@ -79,7 +79,7 @@ int main(int argc, char** argv)
         if (pLine->Magic == MAGIC_SCOPE_END)
             --indent;
 
-        if (pLine->Magic == MAGIC_CALL || pLine->Magic == MAGIC_FUNCTION_BEGIN)
+        if (pLine->Magic == MAGIC_CALL_FUNCTION || pLine->Magic == MAGIC_FUNCTION_BEGIN)
             File << pLine->Params[i++];
         else
             File << Nsb::StringifyMagic(pLine->Magic);

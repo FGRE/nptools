@@ -87,7 +87,7 @@ int main(int argc, char** argv)
                 else
                     Params.push_back(pLine->Params[1]);
                 break;
-            case MAGIC_CALL:
+            case MAGIC_CALL_FUNCTION:
                 Indent();
                 Output << pLine->Params[0] << GenParams(Params);
                 break;
@@ -195,6 +195,11 @@ int main(int argc, char** argv)
                 Output << Nsb::StringifyMagic(pLine->Magic) << GenParams(pLine->Params) << ";\n";
                 break;
             // Builtins which return value
+            case MAGIC_TEXTURE_HEIGHT:
+            case MAGIC_TEXTURE_WIDTH:
+            case MAGIC_SOUND_AMPLITUDE:
+            case MAGIC_ARRAY_SIZE:
+            case MAGIC_SCROLLBAR_VALUE:
             case MAGIC_EXIST_SAVE:
             case MAGIC_FORMAT:
             case MAGIC_UNK140:
