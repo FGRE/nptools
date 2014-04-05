@@ -59,12 +59,13 @@ int main(int argc, char** argv)
     ScriptFile Script(argv[PrintLineNumbers ? 2 : 1]);
     std::ofstream File(Output);
     int indent = -1;
-    while (Line* pLine = Script.GetNextLine())
+    uint32_t SourceIter = 0;
+    while (Line* pLine = Script.GetLine(SourceIter++))
     {
         uint32_t i = 0;
 
         if (PrintLineNumbers)
-            File << std::setfill('0') << std::setw(5) << Script.GetNextLineEntry() - 1 << " ";
+            File << std::setfill('0') << std::setw(5) << SourceIter - 1 << " ";
 
         if (!Nsb::IsValidMagic(pLine->Magic))
         {

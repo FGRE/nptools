@@ -60,7 +60,8 @@ int main(int argc, char** argv)
     ScriptFile Script(argv[1]);
     Output.open(argv[2]);
 
-    while (Line* pLine = Script.GetNextLine())
+    uint32_t SourceIter = 0;
+    while (Line* pLine = Script.GetLine(SourceIter++))
     {
         switch (pLine->Magic)
         {
