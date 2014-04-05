@@ -66,7 +66,7 @@ int main(int argc, char** argv)
         else if (SLine.find("function.") == 0)
             FuncMagic = uint16_t(MAGIC_FUNCTION_BEGIN);
         else
-            FuncMagic = uint16_t(MAGIC_CALL);
+            FuncMagic = uint16_t(MAGIC_CALL_FUNCTION);
 
         if (FuncMagic != 0xFFFF)
         {
