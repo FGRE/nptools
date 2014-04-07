@@ -6,21 +6,21 @@ compiler:
 
 before_install:
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+  - sudo add-apt-repository ppa:boost-latest/ppa -y
   - sudo apt-get update -qq
-  - sudo apt-get install zlib1g-dev
-  - sudo apt-get install libunshield-dev
+
+install:
+  - sudo apt-get install -qq zlib1g-dev libunshield-dev libboost-filesystem1.54-dev libboost-locale1.54-dev
   - if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.8; fi
+
+before_script:
   - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
-  - wget http://sourceforge.net/projects/boost/files/boost/1.54.0/boost_1_54_0.tar.bz2
-  - tar --bzip2 -xf boost_1_54_0.tar.bz2
-  - cd boost_1_54_0
-  - sudo ./bootstrap.sh
-  - sudo ./b2 install
   - cd ..
-  - cd ..
-  - git clone https://github.com/FGRE/libnpa.git
+  - git clone --depth 1 https://github.com/FGRE/libnpa.git
   - cd libnpa
   - cmake . && make
   - cd ../nptools
 
-script: cmake . && make
+script:
+  - cmake .
+  - make
