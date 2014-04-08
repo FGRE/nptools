@@ -94,7 +94,7 @@ void Call::Compile()
     else
     {
         NumParams += 1;
-        Node::Compile(MAGIC_CALL, NumParams);
+        Node::Compile(MAGIC_CALL_FUNCTION, NumParams);
         Name.CompileRaw();
     }
     // Arguments
