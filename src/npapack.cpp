@@ -41,13 +41,21 @@ void RecursiveAppend(ONpaFile& Archive, const path& dir)
 
 int main(int argc, char** argv)
 {
-    if (argc != 2)
+    if (argc < 2 || argc > 3)
     {
-        std::cout << "usage: " << argv[0] << " <directory>" << std::endl;
+        std::cout << "usage: " << argv[0] << " <directory> [charset]" << std::endl;
         return 1;
     }
 
-    NpaFile::SetLocale("ja_JP.SHIFT-JIS");
-    ONpaFile Archive(std::string(argv[1]) + ".npa");
-    RecursiveAppend(Archive, path(argv[1]));
+    if (argc == 3)
+        NpaFile::SetLocale(argv[2]);
+    else
+        NpaFile::SetLocale("ja_JP.SHIFT-JIS");
+
+    std::string DirName(argv[1]);
+    if (DirName.back() == '/')
+        DirName.resize(DirName.size() - 1);
+
+    ONpaFile Archive(DirName + ".npa");
+    RecursiveAppend(Archive, path(DirName));
 }

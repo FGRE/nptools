@@ -44,13 +44,17 @@ void WriteFile(char* Data, uint32_t Size, std::string FileName)
 
 int main(int argc, char** argv)
 {
-    if (argc != 2)
+    if (argc < 2 || argc > 3)
     {
-        std::cout << "usage: " << argv[0] << " <file.npa>" << std::endl;
+        std::cout << "usage: " << argv[0] << " <file.npa> [charset]" << std::endl;
         return 1;
     }
 
-    NpaFile::SetLocale("ja_JP.SHIFT-JIS");
+    if (argc == 3)
+        NpaFile::SetLocale(argv[2]);
+    else
+        NpaFile::SetLocale("ja_JP.SHIFT-JIS");
+
     INpaFile Archive(argv[1]);
     for (INpaFile::NpaIterator iter = Archive.Begin(); iter != Archive.End(); ++iter)
     {
