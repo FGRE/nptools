@@ -18,6 +18,7 @@
 #include <iostream>
 #include <fstream>
 #include "scriptfile.hpp"
+#include "npafile.hpp"
 #include "nsbmagic.hpp"
 using namespace std;
 
@@ -51,11 +52,16 @@ void BinaryOperator(string Op)
 
 int main(int argc, char** argv)
 {
-    if (argc != 3)
+    if (argc < 3 || argc > 4)
     {
-        std::cout << "usage: " << argv[0] << " <input.nsb> <output.nss>" << std::endl;
+        std::cout << "usage: " << argv[0] << " <input.nsb> <output.nss> [charset]" << std::endl;
         return 1;
     }
+
+    if (argc == 4)
+        NpaFile::SetLocale(argv[3]);
+    else
+        NpaFile::SetLocale("ja_JP.SHIFT-JIS");
 
     ScriptFile Script(argv[1]);
     Output.open(argv[2]);
