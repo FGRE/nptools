@@ -15,27 +15,27 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * */
-#include "npafile.hpp"
+#include "inpafile.hpp"
 
 #include <iostream>
-#include <boost/locale.hpp>
+#include <fstream>
 #include <boost/filesystem.hpp>
 using namespace boost::filesystem;
-using namespace boost::locale;
-using namespace boost::locale::conv;
 
 void WriteFile(char* Data, uint32_t Size, std::string FileName)
 {
     // Create directories
     std::string Path = FileName;
-    char* delim = strchr((char*)FileName.c_str(), '/');
-    do
+    if (char* delim = strchr((char*)FileName.c_str(), '/'))
     {
-        *delim = 0;
-        if (!exists(path(Path)))
-            create_directory(path(Path));
-        *delim = '/';
-    } while ((delim = strchr(delim + 1, '/')));
+        do
+        {
+            *delim = 0;
+            if (!exists(path(Path)))
+                create_directory(path(Path));
+            *delim = '/';
+        } while ((delim = strchr(delim + 1, '/')));
+    }
 
     // Create file
     std::ofstream Out(FileName, std::ios::binary | std::ios::out);
@@ -50,15 +50,13 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    std::locale loc = generator().generate("ja_JP.SHIFT-JIS");
-
-    NpaFile Achieve(argv[1], NPA_READ);
-    for (NpaIterator File = Achieve.Begin(); File != Achieve.End(); ++File)
+    NpaFile::SetLocale("ja_JP.SHIFT-JIS");
+    INpaFile Archive(argv[1]);
+    for (INpaFile::NpaIterator iter = Archive.Begin(); iter != Archive.End(); ++iter)
     {
-        std::string FileName = to_utf<char>(File.GetFileNameRaw(), File.GetFileNameRaw() + File.GetFileNameSize(), loc);
-        std::cout << "Writing file: " << FileName << "..." << std::endl;
-        char* Data = File.GetFileData();
-        WriteFile(Data, File.GetFileSize(), FileName);
-        delete Data;
+        char* Data = Archive.ReadFile(iter);
+        std::cout << "Writing file: " << iter->first << std::endl;
+        WriteFile(Data, iter->second.Size, iter->first);
+        delete[] Data;
     }
 }

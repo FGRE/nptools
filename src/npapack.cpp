@@ -15,13 +15,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * */
-#include "npafile.hpp"
+#include "onpafile.hpp"
 
 #include <boost/filesystem.hpp>
 #include <iostream>
 using namespace boost::filesystem;
 
-void RecursiveAppend(NpaFile& Achieve, const path& dir)
+void RecursiveAppend(ONpaFile& Archive, const path& dir)
 {
     if (!exists(dir) || !is_directory(dir))
         return;
@@ -30,11 +30,11 @@ void RecursiveAppend(NpaFile& Achieve, const path& dir)
     for (directory_iterator i(dir); i != end; ++i)
     {
         if (is_directory(i->path()))
-            RecursiveAppend(Achieve, i->path());
+            RecursiveAppend(Archive, i->path());
         else
         {
             std::cout << "Appending file: " << i->path().string() << "..." << std::endl;
-            Achieve.AppendFile(i->path().string());
+            Archive.WriteFile(i->path().string());
         }
     }
 }
@@ -47,6 +47,7 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    NpaFile Achieve(argv[1], NPA_CREATE);
-    RecursiveAppend(Achieve, path(argv[1]));
+    NpaFile::SetLocale("ja_JP.SHIFT-JIS");
+    ONpaFile Archive(std::string(argv[1]) + ".npa");
+    RecursiveAppend(Archive, path(argv[1]));
 }
