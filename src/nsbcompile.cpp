@@ -17,24 +17,26 @@
  * */
 #include "scriptfile.hpp"
 #include "nsbmagic.hpp"
+#include "npafile.hpp"
 
 #include <iostream>
 #include <algorithm>
 #include <cstring>
 #include <fstream>
-#include <boost/locale.hpp>
-using namespace boost::locale;
-using namespace boost::locale::conv;
 
 int main(int argc, char** argv)
 {
-    if (argc != 3)
+    if (argc < 3 || argc > 4)
     {
-        std::cout << "usage: " << argv[0] << " <input.nss> <output.nsb>" << std::endl;
+        std::cout << "usage: " << argv[0] << " <input.nss> <output.nsb> [charset]" << std::endl;
         return 1;
     }
 
-    std::locale loc = generator().generate("ja_JP.SHIFT-JIS");
+    if (argc == 4)
+        NpaFile::SetLocale(argv[3]);
+    else
+        NpaFile::SetLocale("ja_JP.SHIFT-JIS");
+
     std::ifstream Script(argv[1]);
     std::ofstream Binary(argv[2], std::ios::binary);
     std::string SLine;
@@ -45,7 +47,6 @@ int main(int argc, char** argv)
     while (getline(Script, SLine, ';'))
     {
         Script.ignore();
-        SLine = from_utf<char>(SLine.c_str(), SLine.c_str() + SLine.size(), loc);
         FuncMagic = 0xFFFF;
         SLine.erase(std::remove_if(SLine.begin(), SLine.end(), isspace), SLine.end());
         std::size_t it = SLine.find("("), Delim;
@@ -74,7 +75,7 @@ int main(int argc, char** argv)
             Binary.write((char*)&FuncMagic, sizeof(uint16_t));
             Binary.write((char*)&NumParams, sizeof(uint16_t));
             Binary.write((char*)&it, sizeof(uint32_t));
-            Binary.write(SLine.c_str(), it);
+            Binary.write(NpaFile::FromUtf8(SLine).c_str(), it);
             --NumParams;
         }
 
