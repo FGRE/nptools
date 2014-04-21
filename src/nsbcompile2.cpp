@@ -18,19 +18,16 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
-#include <boost/locale.hpp>
+#include "npafile.hpp"
 #include "nsbcompile2.hpp"
 #include "scriptfile.hpp"
 #include "parser.hpp"
-using namespace boost::locale;
-using namespace boost::locale::conv;
 
 class Block;
 extern Block* pRoot;
 extern int yyparse();
 static uint32_t Counter = 1;
 static ofstream Output;
-static locale loc = generator().generate("ja_JP.SHIFT-JIS");
 
 const char* ArgumentTypes[] =
 {
@@ -41,7 +38,7 @@ const char* ArgumentTypes[] =
 
 void WriteSJIS(string Data)
 {
-    Data = from_utf<char>(Data.c_str(), Data.c_str() + Data.size(), loc);
+    Data = NpaFile::FromUtf8(Data);
     Output.write(Data.c_str(), Data.size());
 }
 
@@ -181,9 +178,13 @@ void Condition::Compile()
 
 int main(int argc, char** argv)
 {
-    if (argc != 2)
+    if (argc != 3)
+    {
+        std::cout << "usage: " << argv[0] << " <output.nsb> <charset>" << std::endl;
         return 1;
+    }
 
+    NpaFile::SetLocale(argv[2]);
     yyparse();
     Output.open(argv[1], ios::binary);
     pRoot->Compile();
