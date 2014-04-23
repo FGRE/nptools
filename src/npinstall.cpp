@@ -30,7 +30,7 @@ const char* Directories[2] =
     "ムービー" // Movies
 };
 
-std::locale Locale = generator().generate("ja_JP.SHIFT-JIS");
+std::locale Locale = generator().generate("ja_JP.CP932");
 
 void ExtractFile(Unshield* pUnshield, int index, string OutputDirectory)
 {

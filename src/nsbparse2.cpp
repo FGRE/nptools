@@ -61,7 +61,7 @@ int main(int argc, char** argv)
     if (argc == 4)
         NpaFile::SetLocale(argv[3]);
     else
-        NpaFile::SetLocale("ja_JP.SHIFT-JIS");
+        NpaFile::SetLocale("ja_JP.CP932");
 
     ScriptFile Script(argv[1]);
     Output.open(argv[2]);

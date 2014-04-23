@@ -505,7 +505,7 @@ int crypt2(int curnum, char *name)
 }
 
 FILE* infile;
-std::locale loc = generator().generate("ja_JP.SHIFT-JIS");
+std::locale loc = generator().generate("ja_JP.CP932");
 
 void extractnpa(int i, int pos, char* destination);
 
@@ -569,7 +569,7 @@ int main(int argc, char** argv)
         fread(&NPAEntry[i].origsize,1,4,infile);
 
         std::string utfPath = to_utf<char>(NPAEntry[i].filename, strlen(NPAEntry[i].filename) + NPAEntry[i].filename, loc);
-        boost::replace_all(utfPath, "¥", "/");
+        boost::replace_all(utfPath, "\\", "/");
 
         printf("%04d: %-50s 0x%08X [%08X]\n",i,utfPath.c_str(), NPAEntry[i].offset,NPAEntry[i].compsize);
 

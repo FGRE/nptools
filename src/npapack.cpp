@@ -50,7 +50,7 @@ int main(int argc, char** argv)
     if (argc == 3)
         NpaFile::SetLocale(argv[2]);
     else
-        NpaFile::SetLocale("ja_JP.SHIFT-JIS");
+        NpaFile::SetLocale("ja_JP.CP932");
 
     std::string DirName(argv[1]);
     if (DirName.back() == '/')

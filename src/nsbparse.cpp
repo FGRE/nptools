@@ -53,7 +53,7 @@ int main(int argc, char** argv)
             PrintLineNumbers = true;
     }
 
-    NpaFile::SetLocale("ja_JP.SHIFT-JIS");
+    NpaFile::SetLocale("ja_JP.CP932");
 
     std::string Output = argv[PrintLineNumbers ? 2 : 1];
     Output[Output.size() - 1] = 's';

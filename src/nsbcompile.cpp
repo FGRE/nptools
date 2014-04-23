@@ -35,7 +35,7 @@ int main(int argc, char** argv)
     if (argc == 4)
         NpaFile::SetLocale(argv[3]);
     else
-        NpaFile::SetLocale("ja_JP.SHIFT-JIS");
+        NpaFile::SetLocale("ja_JP.CP932");
 
     std::ifstream Script(argv[1]);
     std::ofstream Binary(argv[2], std::ios::binary);
