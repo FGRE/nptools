@@ -17,6 +17,7 @@
  * */
 #include "scriptfile.hpp"
 #include "nsbmagic.hpp"
+#include "npafile.hpp"
 
 #include <iostream>
 #include <fstream>
@@ -51,6 +52,8 @@ int main(int argc, char** argv)
         else
             PrintLineNumbers = true;
     }
+
+    NpaFile::SetLocale("ja_JP.SHIFT-JIS");
 
     std::string Output = argv[PrintLineNumbers ? 2 : 1];
     Output[Output.size() - 1] = 's';
