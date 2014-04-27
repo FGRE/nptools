@@ -27,39 +27,19 @@
 
 int main(int argc, char** argv)
 {
-    if (argc < 2 || argc > 3)
+    if (argc != 3)
     {
-        std::cout << "usage: " << argv[0] << "[-l] <input.nsb>" << std::endl;
+        std::cout << "usage: " << argv[0] << " <input.nsb> <charset>" << std::endl;
         return 1;
     }
 
-    bool PrintLineNumbers = false;
-    if (argc == 2)
-    {
-        if (argv[1][0] == '-')
-        {
-            std::cout << "No input file specified" << std::endl;
-            return 1;
-        }
-    }
-    else
-    {
-        if (std::string(argv[1]) != "-l")
-        {
-            std::cout << "Invalid option specified" << std::endl;
-            return 1;
-        }
-        else
-            PrintLineNumbers = true;
-    }
+    NpaFile::SetLocale(argv[2]);
 
-    NpaFile::SetLocale("ja_JP.CP932");
-
-    std::string Output = argv[PrintLineNumbers ? 2 : 1];
+    std::string Output = argv[1];
     Output[Output.size() - 1] = 's';
     Output = Output.substr(Output.find_last_of("/") + 1);
 
-    ScriptFile Script(argv[PrintLineNumbers ? 2 : 1]);
+    ScriptFile Script(argv[1]);
     std::ofstream File(Output);
     int indent = -1;
     uint32_t SourceIter = 0;
@@ -67,8 +47,7 @@ int main(int argc, char** argv)
     {
         uint32_t i = 0;
 
-        if (PrintLineNumbers)
-            File << std::setfill('0') << std::setw(5) << SourceIter - 1 << " ";
+        File << std::setfill('0') << std::setw(5) << SourceIter - 1 << " ";
 
         if (!Nsb::IsValidMagic(pLine->Magic))
         {
