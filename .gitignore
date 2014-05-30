@@ -34,4 +34,5 @@ npaextract
 nipa
 nsbparse2
 nsbcompile2
+npcrypt
 *.exe
