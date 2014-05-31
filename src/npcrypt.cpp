@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * */
 #include "npafile.hpp"
-#include <fstream>
+#include "fscommon.hpp"
 
 int main(int argc, char** argv)
 {
@@ -26,16 +26,8 @@ int main(int argc, char** argv)
         return 1;
     }
 
-    // Read
-    std::ifstream In(argv[1], std::ios::binary);
-    In.seekg(0, std::ios::end);
-    int Size = In.tellg();
-    char* pData = new char[Size];
-    In.seekg(0, std::ios::beg);
-    In.read(pData, Size);
-
-    // Write
-    std::ofstream Out(argv[2], std::ios::binary);
-    Out.write(NpaFile::Decrypt(pData, Size), Size);
+    uint32_t Size;
+    char* pData = fs::ReadFile(argv[1] , Size);
+    fs::WriteFile(argv[2], NpaFile::Decrypt(pData, Size), Size);
     delete[] pData;
 }
