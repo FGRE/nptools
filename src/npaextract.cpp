@@ -16,31 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * */
 #include "inpafile.hpp"
-
+#include "fscommon.hpp"
 #include <iostream>
-#include <fstream>
-#include <boost/filesystem.hpp>
-using namespace boost::filesystem;
-
-void WriteFile(char* Data, uint32_t Size, std::string FileName)
-{
-    // Create directories
-    std::string Path = FileName;
-    if (char* delim = strchr((char*)FileName.c_str(), '/'))
-    {
-        do
-        {
-            *delim = 0;
-            if (!exists(path(Path)))
-                create_directory(path(Path));
-            *delim = '/';
-        } while ((delim = strchr(delim + 1, '/')));
-    }
-
-    // Create file
-    std::ofstream Out(FileName, std::ios::binary | std::ios::out);
-    Out.write(Data, Size);
-}
 
 int main(int argc, char** argv)
 {
@@ -58,9 +35,9 @@ int main(int argc, char** argv)
     INpaFile Archive(argv[1]);
     for (INpaFile::NpaIterator iter = Archive.Begin(); iter != Archive.End(); ++iter)
     {
-        char* Data = Archive.ReadFile(iter);
+        char* pData = Archive.ReadFile(iter);
         std::cout << "Writing file: " << iter->first << std::endl;
-        WriteFile(Data, iter->second.Size, iter->first);
-        delete[] Data;
+        fs::WriteFileDirectory(iter->first, pData, iter->second.Size);
+        delete[] pData;
     }
 }
