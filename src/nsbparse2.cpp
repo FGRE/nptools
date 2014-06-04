@@ -17,6 +17,7 @@
  * */
 #include <iostream>
 #include <fstream>
+#include <boost/lexical_cast.hpp>
 #include "scriptfile.hpp"
 #include "npafile.hpp"
 #include "nsbmagic.hpp"
@@ -161,7 +162,13 @@ int main(int argc, char** argv)
             case MAGIC_SET:
                 Indent();
                 if (!Params.empty())
-                    Output << pLine->Params[0] << " = " << Params.back();
+                {
+                    if (pLine->Params[0] == "__array_variable__")
+                        Output << Params[0];
+                    else
+                        Output << pLine->Params[0];
+                    Output << " = " << Params.back();
+                }
                 else
                     cout << "WARNING: MAGIC_SET without parameters! (Perhaps builtin return?)" << endl;
                 break;
@@ -202,10 +209,11 @@ int main(int argc, char** argv)
                 Output << Nsb::StringifyMagic(pLine->Magic) << GenParams(pLine->Params) << ";\n";
                 break;
             // Builtins which return value
+            case MAGIC_STR_STR:
             case MAGIC_TEXTURE_HEIGHT:
             case MAGIC_TEXTURE_WIDTH:
             case MAGIC_SOUND_AMPLITUDE:
-            case MAGIC_ARRAY_SIZE:
+            case MAGIC_COUNT:
             case MAGIC_SCROLLBAR_VALUE:
             case MAGIC_EXIST_SAVE:
             case MAGIC_FORMAT:
@@ -230,6 +238,15 @@ int main(int argc, char** argv)
                 Indent();
                 Output << "return;\n";
                 break;
+            case MAGIC_ARRAY_READ:
+            {
+                string Param = pLine->Params[0];
+                for (int i = 0; i < Params.size(); ++i)
+                    Param += "[" + Params[i] + "]";
+                Params.resize(Params.size() - boost::lexical_cast<int>(pLine->Params[1]));
+                Params.push_back(Param);
+                break;
+            }
             default:
                 Indent();
                 Output << Nsb::StringifyMagic(pLine->Magic) << GenParams(Params);
