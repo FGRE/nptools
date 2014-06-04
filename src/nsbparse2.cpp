@@ -210,8 +210,8 @@ int main(int argc, char** argv)
                 break;
             // Builtins which return value
             case MAGIC_STR_STR:
-            case MAGIC_TEXTURE_HEIGHT:
-            case MAGIC_TEXTURE_WIDTH:
+            case MAGIC_IMAGE_HORIZON:
+            case MAGIC_IMAGE_VERTICAL:
             case MAGIC_SOUND_AMPLITUDE:
             case MAGIC_COUNT:
             case MAGIC_SCROLLBAR_VALUE:
@@ -222,7 +222,7 @@ int main(int argc, char** argv)
             case MAGIC_UNK184:
             case MAGIC_TIME:
             case MAGIC_GET_MOVIE_TIME:
-            case MAGIC_GET_SCRIPT_NAME:
+            case MAGIC_GET_MODULE_FILE_NAME:
                 Params.resize(Params.size() - pLine->Params.size());
                 Params.push_back(string(Nsb::StringifyMagic(pLine->Magic)) + GenParams(pLine->Params));
                 break;
