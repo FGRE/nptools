@@ -23,6 +23,7 @@
 #include "nsbmagic.hpp"
 using namespace std;
 
+Line* pLine;
 ofstream Output;
 vector<string> Params;
 int IndentLevel = 0;
@@ -51,6 +52,13 @@ void BinaryOperator(string Op)
     Params.resize(Params.size() - 1);
 }
 
+void AssignOperator(string Op)
+{
+    Indent();
+    Output << pLine->Params[0] << " += " << Params.back();
+    Params.resize(Params.size() - 1);
+}
+
 int main(int argc, char** argv)
 {
     if (argc < 3 || argc > 4)
@@ -68,7 +76,7 @@ int main(int argc, char** argv)
     Output.open(argv[2]);
 
     uint32_t SourceIter = 0;
-    while (Line* pLine = Script.GetLine(SourceIter++))
+    while (pLine = Script.GetLine(SourceIter++))
     {
         switch (pLine->Magic)
         {
@@ -119,6 +127,12 @@ int main(int argc, char** argv)
             case MAGIC_END_SCENE:
             case MAGIC_END_CHAPTER:
                 Output << '\n';
+                break;
+            case MAGIC_ADD_ASSIGN:
+                AssignOperator("+=");
+                break;
+            case MAGIC_SUB_ASSIGN:
+                AssignOperator("-=");
                 break;
             case MAGIC_ADD:
                 BinaryOperator("+");
@@ -216,7 +230,7 @@ int main(int argc, char** argv)
             case MAGIC_COUNT:
             case MAGIC_SCROLLBAR_VALUE:
             case MAGIC_EXIST_SAVE:
-            case MAGIC_FORMAT:
+            case MAGIC_STRING:
             case MAGIC_UNK140:
             case MAGIC_READ_FILE:
             case MAGIC_UNK184:
