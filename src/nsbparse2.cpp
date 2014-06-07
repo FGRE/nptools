@@ -89,7 +89,7 @@ int main(int argc, char** argv)
             case MAGIC_GET:
                 Params.push_back(pLine->Params[0]);
                 break;
-            case MAGIC_SET_PARAM:
+            case MAGIC_LITERAL:
                 if (pLine->Params[0] == "STRING")
                     Params.push_back(string("\"" + pLine->Params[1] + "\""));
                 else
@@ -107,17 +107,17 @@ int main(int argc, char** argv)
                 Output << GenParams(pLine->Params) << '\n';
                 break;
             }
-            case MAGIC_SCENE_BEGIN:
+            case MAGIC_SCENE_DECLARATION:
                 pLine->Params[0][5] = ' ';
                 Output << pLine->Params[0] << '\n';
                 break;
-            case MAGIC_CHAPTER_BEGIN:
+            case MAGIC_CHAPTER_DECLARATION:
                 pLine->Params[0][7] = ' ';
                 Output << pLine->Params[0] << '\n';
                 break;
             case MAGIC_FUNCTION_END:
-            case MAGIC_SCENE_END:
-            case MAGIC_CHAPTER_END:
+            case MAGIC_END_SCENE:
+            case MAGIC_END_CHAPTER:
                 Output << '\n';
                 break;
             case MAGIC_ADD:
@@ -159,7 +159,7 @@ int main(int argc, char** argv)
             case MAGIC_LOGICAL_NOT:
                 Params[Params.size() - 1] = string("!") + Params[Params.size() - 1];
                 break;
-            case MAGIC_SET:
+            case MAGIC_ASSIGN:
                 Indent();
                 if (!Params.empty())
                 {
@@ -221,7 +221,8 @@ int main(int argc, char** argv)
             case MAGIC_READ_FILE:
             case MAGIC_UNK184:
             case MAGIC_TIME:
-            case MAGIC_GET_MOVIE_TIME:
+            case MAGIC_REMAIN_TIME:
+            case MAGIC_DURATION_TIME:
             case MAGIC_GET_MODULE_FILE_NAME:
                 Params.resize(Params.size() - pLine->Params.size());
                 Params.push_back(string(Nsb::StringifyMagic(pLine->Magic)) + GenParams(pLine->Params));

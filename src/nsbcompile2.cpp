@@ -60,7 +60,7 @@ void Argument::Compile()
     {
         const char* StrType = ArgumentTypes[Type];
         uint32_t TypeSize = strlen(StrType);
-        Node::Compile(MAGIC_SET_PARAM, 2);
+        Node::Compile(MAGIC_LITERAL, 2);
         Output.write((char*)&TypeSize, sizeof(uint32_t));
         Output.write(StrType, TypeSize);
     }
@@ -136,23 +136,23 @@ void Function::Compile()
 void Chapter::Compile()
 {
     Name.Data = string("chapter.") + Name.Data;
-    CompilePrototype(MAGIC_CHAPTER_BEGIN, 1);
+    CompilePrototype(MAGIC_CHAPTER_DECLARATION, 1);
     Subroutine::Compile();
-    CompileReturn(MAGIC_CHAPTER_END);
+    CompileReturn(MAGIC_END_CHAPTER);
 }
 
 void Scene::Compile()
 {
     Name.Data = string("scene.") + Name.Data;
-    CompilePrototype(MAGIC_SCENE_BEGIN, 1);
+    CompilePrototype(MAGIC_SCENE_DECLARATION, 1);
     Subroutine::Compile();
-    CompileReturn(MAGIC_SCENE_END);
+    CompileReturn(MAGIC_END_SCENE);
 }
 
 void Assignment::Compile()
 {
     Rhs.Compile();
-    Node::Compile(MAGIC_SET, 1);
+    Node::Compile(MAGIC_ASSIGN, 1);
     Name.CompileRaw();
 }
 
