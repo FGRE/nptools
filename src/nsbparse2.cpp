@@ -55,7 +55,7 @@ void BinaryOperator(string Op)
 void AssignOperator(string Op)
 {
     Indent();
-    Output << pLine->Params[0] << " += " << Params.back();
+    Output << pLine->Params[0] << " " << Op << " " << Params.back();
     Params.resize(Params.size() - 1);
 }
 
