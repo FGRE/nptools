@@ -46,6 +46,18 @@ string GenParams(vector<string>& Params)
     return ParamList;
 }
 
+void WriteDefault()
+{
+    Indent();
+    Output << Nsb::StringifyMagic(pLine->Magic) << GenParams(Params);
+}
+
+void WriteToParams()
+{
+    Params.resize(Params.size() - pLine->Params.size());
+    Params.push_back(string(Nsb::StringifyMagic(pLine->Magic)) + GenParams(pLine->Params));
+}
+
 void BinaryOperator(string Op)
 {
     Params[Params.size() - 2] = Params[Params.size() - 2] + " " + Op + " " + Params[Params.size() - 1];
@@ -238,8 +250,7 @@ int main(int argc, char** argv)
             case MAGIC_REMAIN_TIME:
             case MAGIC_DURATION_TIME:
             case MAGIC_GET_MODULE_FILE_NAME:
-                Params.resize(Params.size() - pLine->Params.size());
-                Params.push_back(string(Nsb::StringifyMagic(pLine->Magic)) + GenParams(pLine->Params));
+                WriteToParams();
                 break;
             case MAGIC_SELECT:
                 Indent();
@@ -262,9 +273,14 @@ int main(int argc, char** argv)
                 Params.push_back(Param);
                 break;
             }
+            case MAGIC_VARIABLE_VALUE:
+                if (pLine->Params.size() == 2)
+                    WriteToParams();
+                else
+                    WriteDefault();
+                break;
             default:
-                Indent();
-                Output << Nsb::StringifyMagic(pLine->Magic) << GenParams(Params);
+                WriteDefault();
                 break;
         }
     }
