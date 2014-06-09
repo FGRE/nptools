@@ -230,9 +230,12 @@ int main(int argc, char** argv)
                 Output << Params.back() << "++";
                 break;
             case MAGIC_CALL_CHAPTER:
+                Indent();
+                Output << "call_chapter " << pLine->Params[0] << ";\n";
+                break;
             case MAGIC_CALL_SCENE:
                 Indent();
-                Output << Nsb::StringifyMagic(pLine->Magic) << GenParams(pLine->Params) << ";\n";
+                Output << "call_scene " << pLine->Params[0] << ";\n";
                 break;
             // Builtins which return value
             case MAGIC_STR_STR:
