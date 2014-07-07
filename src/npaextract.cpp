@@ -20,43 +20,9 @@
 #include "fscommon.hpp"
 #include <iostream>
 
-const char* NipaGames[] =
-{
-    "ChaosHead",
-    "ChaosHeadTR1",
-    "ChaosHeadTR2",
-    "MuramasaTR",
-    "Muramasa",
-    "Sumaga",
-    "Django",
-    "DjangoTR",
-    "Lamento",
-    "LamentoTR",
-    "SweetPool",
-    "SumagaSP",
-    "Demonbane",
-    "MuramasaAD",
-    "Axanel",
-    "Kikokugai",
-    "SoniComiTR2",
-    "Sumaga3P",
-    "SoniComi",
-    "LostX",
-    "LostXTrailer",
-    "DramaticalMurder",
-    nullptr
-};
-
-uint8_t GameStringToID(std::string String)
-{
-    for (int i = 0; NipaGames[i]; ++i)
-        if (String == NipaGames[i])
-            return i;
-    return -1;
-}
-
 int PrintArguments(char** argv)
 {
+    const char** NipaGames = INipaFile::GetGameStringList();
     std::cout << "Supported games:\nSteinsGate\n";
     for (int i = 0; NipaGames[i]; ++i)
         std::cout << NipaGames[i] << '\n';
@@ -79,7 +45,7 @@ int main(int argc, char** argv)
         pArchive = new ISGFile(argv[1]);
     else
     {
-        uint8_t GameID = GameStringToID(argv[2]);
+        uint8_t GameID = INipaFile::GameStringToID(argv[2]);
         if (GameID == -1)
             return PrintArguments(argv);
         pArchive = new INipaFile(argv[1], GameID);
