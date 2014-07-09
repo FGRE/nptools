@@ -53,7 +53,9 @@ int main(int argc, char** argv)
 
     for (INipaFile::NpaIterator iter = pArchive->Begin(); iter != pArchive->End(); ++iter)
     {
-        // TODO: if IsNotDirectory
+        if (pArchive->IsDirectory(iter))
+            continue;
+
         char* pData = pArchive->ReadFile(iter);
         std::cout << "Writing file: " << iter->first << std::endl;
         fs::WriteFileDirectory(iter->first, pData, pArchive->GetFileSize(iter));
