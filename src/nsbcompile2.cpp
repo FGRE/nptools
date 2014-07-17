@@ -52,11 +52,11 @@ void Argument::Compile()
     // Variable
     else
     {
-        const char* StrType = ArgumentTypes[Type];
-        uint32_t TypeSize = strlen(StrType);
         Node::Compile(MAGIC_LITERAL, 2);
+        std::string Data = NpaFile::FromUtf8(ArgumentTypes[Type]);
+        uint32_t TypeSize = Data.size();
         Output.write((char*)&TypeSize, sizeof(uint32_t));
-        Output.write(StrType, TypeSize);
+        Output.write(Data.c_str(), TypeSize);
     }
     CompileRaw();
 }
