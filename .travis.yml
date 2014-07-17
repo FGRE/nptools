@@ -39,7 +39,8 @@ install:
 before_script:
   - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
   - cd .. && mkdir libnpa && cd libnpa
-  - curl http://f4ke.de/dev/fgre/downloads/libnpa-travis.tar.bz2 | tar jx --strip-components=1
+  - curl http://f4ke.de/dev/fgre/downloads/libnpa-travis.tar.bz2 | tar jx --strip-components=2
+  - mv libnpa include
   - cd $TRAVIS_BUILD_DIR
 
 script:
