@@ -20,8 +20,8 @@
     int token;
 }
 
-%token <string> TIDENTIFIER TFLOAT TINTEGER TXML
-%token <token> TLPAREN TRPAREN TLBRACE TRBRACE TFUNCTION TSEMICOLON TDOLLAR TEQUAL TCOMMA TQUOTE TCHAPTER TSCENE
+%token <string> TIDENTIFIER TFLOAT TINTEGER TXML TDOLLAR
+%token <token> TLPAREN TRPAREN TLBRACE TRBRACE TFUNCTION TSEMICOLON TEQUAL TCOMMA TQUOTE TCHAPTER TSCENE
 %token <token> TADD TSUB TMUL TDIV TIF TWHILE TLESS TGREATER TEQUALEQUAL TNEQUAL TGEQUAL TLEQUAL TAND TOR TNOT
 %token <token> TRETURN
 
@@ -62,7 +62,7 @@ func_args : { $$ = new ArgumentList(); }
           | func_args TCOMMA arg { $1->push_back($<arg>3); }
           ;
 
-arg : TDOLLAR TIDENTIFIER { $$ = new Argument(string("$") + *$2, ARG_VARIABLE); delete $2; }
+arg : TDOLLAR TIDENTIFIER { $$ = new Argument(*$1 + *$2, ARG_VARIABLE); delete $1; delete $2; }
       | TIDENTIFIER { $$ = new Argument(*$1, ARG_FUNCTION); delete $1; }
       | TQUOTE TIDENTIFIER TQUOTE { $$ = new Argument(*$2, ARG_STRING); delete $2; }
       | TINTEGER { $$ = new Argument(*$1, ARG_INT); delete $1; }

@@ -24,7 +24,7 @@ extern "C" int yywrap() { }
 [0-9]+                  SAVE_TOKEN; return TINTEGER;
 ","                     return TOKEN(TCOMMA);
 ";"                     return TOKEN(TSEMICOLON);
-"$"                     return TOKEN(TDOLLAR);
+[$#]                    SAVE_TOKEN; return TDOLLAR;
 "="                     return TOKEN(TEQUAL);
 "("                     return TOKEN(TLPAREN);
 ")"                     return TOKEN(TRPAREN);
