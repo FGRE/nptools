@@ -27,6 +27,7 @@ extern Block* pRoot;
 extern int yyparse();
 static uint32_t Counter = 1;
 static ofstream Output;
+static ofstream MapOutput;
 
 const char* ArgumentTypes[] =
 {
@@ -120,6 +121,15 @@ void Subroutine::CompileReturn(uint16_t EndMagic)
 void Function::Compile()
 {
     Name.Data = string("function.") + Name.Data;
+
+    // Write symbol to .map
+    uint32_t Pos = Output.tellp();
+    uint16_t Size = Name.Data.size();
+    MapOutput.write((char*)&Pos, sizeof(uint32_t));
+    MapOutput.write((char*)&Size, sizeof(uint32_t));
+    MapOutput.write(Name.Data.c_str(), Size);
+
+    // Compile
     CompilePrototype(MAGIC_FUNCTION_BEGIN, Arguments.size() + 1);
     for (auto i = Arguments.begin(); i != Arguments.end(); ++i)
         (*i)->CompileRaw();
@@ -181,6 +191,9 @@ int main(int argc, char** argv)
 
     NpaFile::SetLocale(argv[2]);
     yyparse();
+
     Output.open(argv[1], ios::binary);
+    MapOutput.open(std::string(argv[1], 0, strlen(argv[1]) - 3) + "map", ios::binary);
+
     pRoot->Compile();
 }
