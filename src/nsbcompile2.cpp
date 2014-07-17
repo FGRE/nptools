@@ -36,12 +36,6 @@ const char* ArgumentTypes[] =
     "FLOAT"
 };
 
-void WriteSJIS(string Data)
-{
-    Data = NpaFile::FromUtf8(Data);
-    Output.write(Data.c_str(), Data.size());
-}
-
 void Node::Compile(uint16_t Magic, uint16_t NumParams)
 {
     Output.write((char*)&Counter, sizeof(uint32_t));
@@ -69,9 +63,10 @@ void Argument::Compile()
 
 void Argument::CompileRaw()
 {
+    Data = NpaFile::FromUtf8(Data);
     uint32_t Size = Data.size();
     Output.write((char*)&Size, sizeof(uint32_t));
-    WriteSJIS(Data);
+    Output.write(Data.c_str(), Size);
 }
 
 void Call::Compile()
