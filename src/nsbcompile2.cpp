@@ -36,6 +36,14 @@ const char* ArgumentTypes[] =
     "FLOAT"
 };
 
+Call* MakeCall(string Name, uint16_t Magic)
+{
+    ArgumentList Args;
+    Args.push_back(new Argument(Name, ARG_STRING));
+    Argument* Arg = new Argument(Nsb::StringifyMagic(Magic), ARG_FUNCTION);
+    return new Call(*Arg, Args, Magic);
+}
+
 void Node::Compile(uint16_t Magic, uint16_t NumParams)
 {
     Output.write((char*)&Counter, sizeof(uint32_t));
@@ -74,7 +82,9 @@ void Call::Compile()
     uint32_t BuiltinMagic = Nsb::MagicifyString(Name.Data.c_str());
 
     // Parameters
-    if (BuiltinMagic != MAGIC_PARSE_TEXT)
+    if (BuiltinMagic != MAGIC_PARSE_TEXT &&
+        BuiltinMagic != MAGIC_CALL_SCENE &&
+        BuiltinMagic != MAGIC_CALL_CHAPTER)
         for (auto i = Arguments.begin(); i != Arguments.end(); ++i)
             (*i)->Compile();
 
@@ -85,13 +95,17 @@ void Call::Compile()
     else
     {
         NumParams += 1;
-        Node::Compile(MAGIC_CALL_FUNCTION, NumParams);
+        Node::Compile(Magic, NumParams);
         Name.CompileRaw();
     }
     // Arguments
     for (auto i = Arguments.begin(); i != Arguments.end(); ++i)
         (*i)->CompileRaw();
-    Node::Compile(MAGIC_CLEAR_PARAMS, 0);
+
+    if (BuiltinMagic != MAGIC_PARSE_TEXT &&
+        BuiltinMagic != MAGIC_CALL_SCENE &&
+        BuiltinMagic != MAGIC_CALL_CHAPTER)
+        Node::Compile(MAGIC_CLEAR_PARAMS, 0);
 }
 
 void Block::Compile()

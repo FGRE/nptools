@@ -23,7 +23,7 @@
 %token <string> TIDENTIFIER TFLOAT TINTEGER TXML TDOLLAR
 %token <token> TLPAREN TRPAREN TLBRACE TRBRACE TFUNCTION TSEMICOLON TEQUAL TCOMMA TQUOTE TCHAPTER TSCENE
 %token <token> TADD TSUB TMUL TDIV TIF TWHILE TLESS TGREATER TEQUALEQUAL TNEQUAL TGEQUAL TLEQUAL TAND TOR TNOT
-%token <token> TRETURN
+%token <token> TRETURN TCALLCHAPTER TCALLSCENE
 
 %type <arg> arg 
 %type <argvec> func_args
@@ -68,12 +68,12 @@ arg : TDOLLAR TIDENTIFIER { $$ = new Argument(*$1 + *$2, ARG_VARIABLE); delete $
       | TINTEGER { $$ = new Argument(*$1, ARG_INT); delete $1; }
       ;
 
-call : arg TLPAREN func_args TRPAREN TSEMICOLON { $$ = new Call(*$1, *$3); delete $3; }
+call : arg TLPAREN func_args TRPAREN TSEMICOLON { $$ = new Call(*$1, *$3, MAGIC_CALL_FUNCTION); delete $3; }
      | TRETURN TSEMICOLON
           {
                ArgumentList Args;
                Argument* Arg = new Argument("Return", ARG_FUNCTION);
-               $$ = new Call(*Arg, Args);
+               $$ = new Call(*Arg, Args, 0);
           }
      | TXML {
                ArgumentList Args;
@@ -81,8 +81,12 @@ call : arg TLPAREN func_args TRPAREN TSEMICOLON { $$ = new Call(*$1, *$3); delet
                Args.push_back(new Argument("TODO", ARG_STRING));
                Args.push_back(new Argument(*$1, ARG_STRING));
                Argument* Arg = new Argument("ParseText", ARG_FUNCTION);
-               $$ = new Call(*Arg, Args);
+               $$ = new Call(*Arg, Args, 0);
             }
+     | TCALLCHAPTER TIDENTIFIER TSEMICOLON { $$ = MakeCall(*$2, MAGIC_CALL_CHAPTER); delete $2; }
+     | TCALLCHAPTER TDOLLAR TIDENTIFIER TSEMICOLON { $$ = MakeCall(*$2 + *$3, MAGIC_CALL_CHAPTER); delete $2; delete $3; }
+     | TCALLSCENE TIDENTIFIER TSEMICOLON { $$ = MakeCall(*$2, MAGIC_CALL_SCENE); delete $2; }
+     | TCALLSCENE TDOLLAR TIDENTIFIER TSEMICOLON { $$ = MakeCall(*$2 + *$3, MAGIC_CALL_SCENE); delete $2; delete $3; }
      ;
 
 expr : arg TEQUAL expr TSEMICOLON { $$ = new Assignment(*$<arg>1, *$3); }

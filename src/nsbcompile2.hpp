@@ -67,9 +67,10 @@ struct Argument : Expression
 
 struct Call : Statement
 {
-    Call(Argument& Name, ArgumentList& Arguments) : Name(Name), Arguments(Arguments) {}
+    Call(Argument& Name, ArgumentList& Arguments, uint16_t Magic) : Name(Name), Arguments(Arguments), Magic(Magic) {}
     virtual void Compile();
 
+    uint16_t Magic;
     Argument& Name;
     ArgumentList Arguments;
 };
@@ -152,5 +153,7 @@ struct UnaryOperator : Expression
     uint16_t Magic;
     Expression& Rhs;
 };
+
+Call* MakeCall(string Name, uint16_t Magic);
 
 #endif
