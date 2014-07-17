@@ -52,9 +52,9 @@ block : TLBRACE stmts TRBRACE { $$ = $2; }
       | TLBRACE TRBRACE { $$ = new Block(); }
       ;
 
-func_decl : TFUNCTION arg TLPAREN func_args TRPAREN block { $$ = new Function(*$2, *$4, *$6); delete $4; }
-          | TCHAPTER arg block { $$ = new Chapter(*$2, *$3); delete $3; }
-          | TSCENE arg block { $$ = new Scene(*$2, *$3); delete $3; }
+func_decl : TFUNCTION arg TLPAREN func_args TRPAREN block { $2->Data = string("function.") + $2->Data; $$ = new Function(*$2, *$4, *$6); delete $4; }
+          | TCHAPTER arg block { $2->Data = string("chapter.") + $2->Data; $$ = new Chapter(*$2, *$3); delete $3; }
+          | TSCENE arg block { $2->Data = string("scene.") + $2->Data; $$ = new Scene(*$2, *$3); delete $3; }
           ;
 
 func_args : { $$ = new ArgumentList(); }

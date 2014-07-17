@@ -104,6 +104,14 @@ void Block::Compile()
 
 void Subroutine::CompilePrototype(uint16_t BeginMagic, uint32_t NumBeginParams)
 {
+    // Write symbol to .map
+    uint32_t Pos = Output.tellp();
+    uint16_t Size = Name.Data.size();
+    MapOutput.write((char*)&Pos, sizeof(uint32_t));
+    MapOutput.write((char*)&Size, sizeof(uint32_t));
+    MapOutput.write(Name.Data.c_str(), Size);
+
+    // Compile
     Node::Compile(BeginMagic, NumBeginParams);
     Name.CompileRaw();
 }
@@ -120,16 +128,6 @@ void Subroutine::CompileReturn(uint16_t EndMagic)
 
 void Function::Compile()
 {
-    Name.Data = string("function.") + Name.Data;
-
-    // Write symbol to .map
-    uint32_t Pos = Output.tellp();
-    uint16_t Size = Name.Data.size();
-    MapOutput.write((char*)&Pos, sizeof(uint32_t));
-    MapOutput.write((char*)&Size, sizeof(uint32_t));
-    MapOutput.write(Name.Data.c_str(), Size);
-
-    // Compile
     CompilePrototype(MAGIC_FUNCTION_BEGIN, Arguments.size() + 1);
     for (auto i = Arguments.begin(); i != Arguments.end(); ++i)
         (*i)->CompileRaw();
@@ -139,7 +137,6 @@ void Function::Compile()
 
 void Chapter::Compile()
 {
-    Name.Data = string("chapter.") + Name.Data;
     CompilePrototype(MAGIC_CHAPTER_DECLARATION, 1);
     Subroutine::Compile();
     CompileReturn(MAGIC_END_CHAPTER);
@@ -147,7 +144,6 @@ void Chapter::Compile()
 
 void Scene::Compile()
 {
-    Name.Data = string("scene.") + Name.Data;
     CompilePrototype(MAGIC_SCENE_DECLARATION, 1);
     Subroutine::Compile();
     CompileReturn(MAGIC_END_SCENE);
