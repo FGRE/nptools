@@ -63,7 +63,7 @@ func_args : { $$ = new ArgumentList(); }
           ;
 
 arg : TDOLLAR TIDENTIFIER { $$ = new Argument(*$1 + *$2, ARG_VARIABLE); delete $1; delete $2; }
-      | TIDENTIFIER { $$ = new Argument(*$1, ARG_FUNCTION); delete $1; }
+      | TIDENTIFIER { $$ = new Argument(*$1, ARG_STRING); delete $1; }
       | TQUOTE TIDENTIFIER TQUOTE { $$ = new Argument(*$2, ARG_STRING); delete $2; }
       | TINTEGER { $$ = new Argument(*$1, ARG_INT); delete $1; }
       ;
