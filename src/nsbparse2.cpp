@@ -118,7 +118,7 @@ int main(int argc, char** argv)
     else
         NpaFile::SetLocale("ja_JP.CP932");
 
-    ScriptFile Script(argv[1]);
+    ScriptFile Script(argv[1], ScriptFile::NSB);
     Output.open(argv[2]);
 
     uint32_t SourceIter = 0;

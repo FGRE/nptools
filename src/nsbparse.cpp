@@ -39,7 +39,7 @@ int main(int argc, char** argv)
     Output[Output.size() - 1] = 's';
     Output = Output.substr(Output.find_last_of("/") + 1);
 
-    ScriptFile Script(argv[1]);
+    ScriptFile Script(argv[1], ScriptFile::NSB);
     std::ofstream File(Output);
     int indent = -1;
     uint32_t SourceIter = 0;
