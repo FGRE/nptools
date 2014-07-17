@@ -23,6 +23,40 @@
 #include "nsbmagic.hpp"
 using namespace std;
 
+// TODO:
+// - Move to libnpa
+// - Use game-specific constants (e.g. steins-gate/src/nsbconstants.cpp)
+const vector<string> NsbConstants =
+{
+    "null",
+    "NULL",
+    "true",
+    "false",
+
+    // MAGIC_REQUEST
+    "Stop",
+    "Play",
+    "Disused",
+    "AddRender",
+    "Lock",
+    "Erase",
+    "UnClickable",
+    "UnLock",
+    "Start",
+    "Enter",
+    "Passive",
+    "Smoothing",
+    "NoLog",
+    "PushText",
+    "NoIcon",
+    "Hideable",
+    "Pause",
+    "Resume",
+    "EntrustSuspend",
+    "CompulsorySuspend",
+    "SubRender"
+};
+
 Line* pLine;
 ofstream Output;
 vector<string> Params;
@@ -110,7 +144,8 @@ int main(int argc, char** argv)
                 Params.push_back(pLine->Params[0]);
                 break;
             case MAGIC_LITERAL:
-                if (pLine->Params[0] == "STRING")
+                if (pLine->Params[0] == "STRING" &&
+                    find(NsbConstants.begin(), NsbConstants.end(), pLine->Params[1]) == NsbConstants.end())
                     Params.push_back(string("\"" + pLine->Params[1] + "\""));
                 else
                     Params.push_back(pLine->Params[1]);
