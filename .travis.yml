@@ -4,23 +4,50 @@ compiler:
   - gcc
   - clang
 
+env:
+  # this is our secret upload key $UPLOAD_TOKEN:
+  secure: "UJt1SJljQZBR55NaOOzzS5w3cvCSq9B8z813RsyHps+9+XWekO+x7+B2zkdP6QGO17cPrcVcY2MW74sxjzOCCzksdy6F4E1RfoDBDc/dD3bwX59LQPx+8mj+h9I7dxo399Tcj85BXGASGDkm/3nocCz47QoyPMZzo5wO/uNYYMw="
+
+branches:
+  only:
+    - master
+
+notifications:
+  email:
+    on_success: change
+    on_failure: change
+  irc:
+    channels:
+      # WORKAROUND: prevents notifications from forks
+      secure: "RG1of2s8vkMy0XitVlYLcOCXlv/R19CPDNJBy+tFdgYzLRMnai/bDUrqgx4e8MhrG19stzWtev00OZH42r3DtNcREKJIB5QZnsFFsG5mUdke9u+5D1vM2lvvPLXkpJ9ho6nPeZVA4JELetykVC94xVuYeQ6MyDnSAqrX/tYamE0="
+    template:
+      - "%{repository_name} (%{commit}): %{message}, details: %{build_url}"
+    on_success: change
+    on_failure: change
+    use_notice: true
+    skip_join: true
+
 before_install:
-  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
-  - sudo add-apt-repository ppa:boost-latest/ppa -y
+  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
+  - sudo add-apt-repository -y ppa:boost-latest/ppa
   - sudo apt-get update -qq
 
 install:
-  - sudo apt-get install -qq zlib1g-dev libunshield-dev libboost-filesystem1.54-dev libboost-locale1.54-dev
+  - sudo apt-get install -qq zlib1g-dev libunshield-dev libboost-filesystem1.54-dev libboost-locale1.54-dev curl
   - if [ "$CXX" = "g++" ]; then sudo apt-get install -qq g++-4.8; fi
 
 before_script:
   - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8" CC="gcc-4.8"; fi
-  - cd ..
-  - git clone --depth 1 https://github.com/FGRE/libnpa.git
-  - cd libnpa
-  - cmake . && make
-  - cd ../nptools
+  - cd .. && mkdir libnpa && cd libnpa
+  - curl http://f4ke.de/dev/fgre/downloads/libnpa-travis.tar.bz2 | tar jx --strip-components=1
+  - cd $TRAVIS_BUILD_DIR
 
 script:
-  - cmake .
-  - make
+  - cmake . && make
+
+after_success:
+  - |
+    if [ "$CXX" = "g++-4.8" ]; then
+      curl https://gist.githubusercontent.com/carstene1ns/a23f152a40a589f098c6/raw/upload.sh > upload.sh
+      make package && bash upload.sh nptools-*.tar.bz2
+    fi
