@@ -22,6 +22,7 @@
 #include <cstdint>
 #include <string>
 #include "nsbmagic.hpp"
+#include "npafile.hpp"
 using namespace std;
 
 class Statement;
@@ -56,7 +57,7 @@ struct Expression : Node
 
 struct Argument : Expression
 {
-    Argument(const string& Data, ArgumentType Type) : Data(Data), Type(Type) {}
+    Argument(const string& Data, ArgumentType Type) : Data(NpaFile::FromUtf8(Data)), Type(Type) {}
     void CompileRaw();
     virtual void Compile();
 

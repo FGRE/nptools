@@ -18,7 +18,6 @@
 #include <iostream>
 #include <fstream>
 #include <cstring>
-#include "npafile.hpp"
 #include "nsbcompile2.hpp"
 #include "scriptfile.hpp"
 #include "parser.hpp"
@@ -63,7 +62,6 @@ void Argument::Compile()
 
 void Argument::CompileRaw()
 {
-    Data = NpaFile::FromUtf8(Data);
     uint32_t Size = Data.size();
     Output.write((char*)&Size, sizeof(uint32_t));
     Output.write(Data.c_str(), Size);
