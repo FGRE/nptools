@@ -154,7 +154,7 @@ int main(int argc, char** argv)
                 Indent();
                 Output << pLine->Params[0] << GenParams(Params);
                 break;
-            case MAGIC_FUNCTION_BEGIN:
+            case MAGIC_FUNCTION_DECLARATION:
             {
                 pLine->Params[0][8] = ' ';
                 Output << pLine->Params[0];
@@ -170,7 +170,7 @@ int main(int argc, char** argv)
                 pLine->Params[0][7] = ' ';
                 Output << pLine->Params[0] << '\n';
                 break;
-            case MAGIC_FUNCTION_END:
+            case MAGIC_END_FUNCTION:
             case MAGIC_END_SCENE:
             case MAGIC_END_CHAPTER:
                 Output << '\n';
@@ -193,13 +193,13 @@ int main(int argc, char** argv)
             case MAGIC_MULTIPLY:
                 BinaryOperator("*");
                 break;
-            case MAGIC_LOGICAL_EQUAL:
+            case MAGIC_CMP_EQUAL:
                 BinaryOperator("==");
                 break;
-            case MAGIC_LOGICAL_GREATER:
+            case MAGIC_CMP_GREATER:
                 BinaryOperator(">");
                 break;
-            case MAGIC_LOGICAL_LESS:
+            case MAGIC_CMP_LESS:
                 BinaryOperator("<");
                 break;
             case MAGIC_LOGICAL_NOT_EQUAL:
@@ -211,10 +211,10 @@ int main(int argc, char** argv)
             case MAGIC_LOGICAL_LESS_EQUAL:
                 BinaryOperator("<=");
                 break;
-            case MAGIC_LOGICAL_AND:
+            case MAGIC_CMP_LOGICAL_AND:
                 BinaryOperator("&&");
                 break;
-            case MAGIC_LOGICAL_OR:
+            case MAGIC_CMP_LOGICAL_OR:
                 BinaryOperator("||");
                 break;
             case MAGIC_LOGICAL_NOT:
