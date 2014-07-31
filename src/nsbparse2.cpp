@@ -264,6 +264,10 @@ int main(int argc, char** argv)
                 Indent();
                 Output << Params.back() << "++";
                 break;
+            case MAGIC_DECREMENT:
+                Indent();
+                Output << Params.back() << "--";
+                break;
             case MAGIC_CALL_CHAPTER:
                 Indent();
                 Output << "call_chapter " << pLine->Params[0] << ";\n";
