@@ -140,7 +140,7 @@ int main(int argc, char** argv)
                 Output << ";\n";
                 Params.clear();
                 break;
-            case MAGIC_GET:
+            case MAGIC_VARIABLE:
                 Params.push_back(pLine->Params[0]);
                 break;
             case MAGIC_LITERAL:
@@ -181,17 +181,20 @@ int main(int argc, char** argv)
             case MAGIC_SUB_ASSIGN:
                 AssignOperator("-=");
                 break;
-            case MAGIC_ADD:
+            case MAGIC_ADD_EXPRESSION:
                 BinaryOperator("+");
                 break;
-            case MAGIC_SUBSTRACT:
+            case MAGIC_SUB_EXPRESSION:
                 BinaryOperator("-");
                 break;
-            case MAGIC_DIVIDE:
+            case MAGIC_DIV_EXPRESSION:
                 BinaryOperator("/");
                 break;
-            case MAGIC_MULTIPLY:
+            case MAGIC_MUL_EXPRESSION:
                 BinaryOperator("*");
+                break;
+            case MAGIC_MOD_EXPRESSION:
+                BinaryOperator("%");
                 break;
             case MAGIC_CMP_EQUAL:
                 BinaryOperator("==");
@@ -251,7 +254,7 @@ int main(int argc, char** argv)
             case MAGIC_PARSE_TEXT:
                 Output << pLine->Params[2] << '\n';
                 break;
-            case MAGIC_NEGATIVE:
+            case MAGIC_NEGA_EXPRESSION:
                 Params[Params.size() - 1] = string("-") + Params[Params.size() - 1];
                 break;
             // Currently ignored builtins
