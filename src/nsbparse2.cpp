@@ -302,7 +302,7 @@ int main(int argc, char** argv)
                 Indent();
                 Output << "select\n";
                 break;
-            case MAGIC_CASE_BEGIN:
+            case MAGIC_CASE:
                 Indent();
                 Output << "case " << pLine->Params[0] << ":\n";
                 break;
