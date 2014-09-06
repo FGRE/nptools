@@ -262,6 +262,8 @@ int main(int argc, char** argv)
             case MAGIC_JUMP: // TODO: Check for else/else if
             case MAGIC_WHILE_END:
             case MAGIC_CASE_END:
+            case MAGIC_SELECT_END:
+            case MAGIC_SELECT_BREAK_END:
                 break;
             case MAGIC_INCREMENT:
                 Indent();
