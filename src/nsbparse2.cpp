@@ -315,9 +315,10 @@ int main(int argc, char** argv)
             case MAGIC_ARRAY_READ:
             {
                 string Param = pLine->Params[0];
-                for (int i = 0; i < Params.size(); ++i)
+                int Size = boost::lexical_cast<int>(pLine->Params[1]);
+                for (int i = Params.size() - Size; i < Params.size(); ++i)
                     Param += "[" + Params[i] + "]";
-                Params.resize(Params.size() - boost::lexical_cast<int>(pLine->Params[1]));
+                Params.resize(Params.size() - Size);
                 Params.push_back(Param);
                 break;
             }
