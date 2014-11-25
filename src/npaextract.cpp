@@ -61,4 +61,5 @@ int main(int argc, char** argv)
         fs::WriteFileDirectory(iter->first, pData, pArchive->GetFileSize(iter));
         delete[] pData;
     }
+    delete pArchive;
 }
