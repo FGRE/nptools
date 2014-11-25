@@ -41,6 +41,7 @@ int main(int argc, char** argv)
     uint32_t Size;
     char* pBuffer = fs::ReadFile(argv[1], Size);
     Nss::Compile(pBuffer, Size, &NsbBuffer, &MapBuffer);
+    delete[] pBuffer;
 
     Output.write(&NsbBuffer.Data[0], NsbBuffer.Size());
     MapOutput.write(&MapBuffer.Data[0], MapBuffer.Size());
