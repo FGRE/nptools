@@ -89,7 +89,7 @@ void WriteDefault()
 void WriteToParams()
 {
     Params.resize(Params.size() - pLine->Params.size());
-    Params.push_back(string(Nsb::StringifyMagic(pLine->Magic)) + GenParams(pLine->Params));
+    Params.push_back(Nsb::StringifyMagic(pLine->Magic) + GenParams(pLine->Params));
 }
 
 void BinaryOperator(string Op)
@@ -144,7 +144,7 @@ int main(int argc, char** argv)
                 Params.push_back(pLine->Params[0]);
                 break;
             case MAGIC_LITERAL:
-                if (pLine->Params[0] == "STRING" &&
+                if (pLine->Params[0] == "STRING" && pLine->Params[1][0] != '#' &&
                     find(NsbConstants.begin(), NsbConstants.end(), pLine->Params[1]) == NsbConstants.end())
                     Params.push_back(string("\"" + pLine->Params[1] + "\""));
                 else
