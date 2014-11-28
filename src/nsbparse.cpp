@@ -55,12 +55,12 @@ int main(int argc, char** argv)
             continue;
         }
 
-        if (pLine->Magic == MAGIC_SCOPE_BEGIN)
-            ++indent;
-        for (int i = 0; i < indent; ++i)
-            File << "    ";
         if (pLine->Magic == MAGIC_SCOPE_END)
             --indent;
+        for (int i = 0; i < indent; ++i)
+            File << "    ";
+        if (pLine->Magic == MAGIC_SCOPE_BEGIN)
+            ++indent;
 
         File << Nsb::StringifyMagic(pLine->Magic);
 
