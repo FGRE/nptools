@@ -27,13 +27,16 @@
 
 int main(int argc, char** argv)
 {
-    if (argc != 3)
+    if (argc < 2 || argc > 3)
     {
-        std::cout << "usage: " << argv[0] << " <input.nsb> <charset>" << std::endl;
+        std::cout << "usage: " << argv[0] << " <input.nsb> [charset]" << std::endl;
         return 1;
     }
 
-    NpaFile::SetLocale(argv[2]);
+    if (argc == 3)
+        NpaFile::SetLocale(argv[2]);
+    else
+        NpaFile::SetLocale("ja_JP.CP932");
 
     std::string Output = argv[1];
     Output[Output.size() - 1] = 's';
