@@ -26,13 +26,16 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-    if (argc != 3)
+    if (argc < 2 || argc > 3)
     {
-        cout << "usage: " << argv[0] << " <input.nss> <charset>" << endl;
+        std::cout << "usage: " << argv[0] << " <input.nss> [charset]" << std::endl;
         return 1;
     }
 
-    NpaFile::SetLocale(argv[2]);
+    if (argc == 3)
+        NpaFile::SetLocale(argv[2]);
+    else
+        NpaFile::SetLocale("ja_JP.CP932");
 
     ofstream Output(string(argv[1], 0, strlen(argv[1]) - 3) + "nsb", ios::binary);
     ofstream MapOutput(string(argv[1], 0, strlen(argv[1]) - 3) + "map", ios::binary);
