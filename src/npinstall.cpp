@@ -17,11 +17,9 @@
  * */
 #include <libunshield.h>
 #include <iostream>
-#include <boost/locale.hpp>
 #include <boost/filesystem.hpp>
+#include "npafile.hpp"
 using namespace boost::filesystem;
-using namespace boost::locale;
-using namespace boost::locale::conv;
 using namespace std;
 
 const char* Directories[2] =
@@ -29,8 +27,6 @@ const char* Directories[2] =
     "ゲームデータ", // Game data
     "ムービー" // Movies
 };
-
-std::locale Locale = generator().generate("ja_JP.CP932");
 
 void ExtractFile(Unshield* pUnshield, int index, string OutputDirectory)
 {
@@ -40,7 +36,7 @@ void ExtractFile(Unshield* pUnshield, int index, string OutputDirectory)
         create_directory(path(OutputDirectory));
 
     FileName += unshield_file_name(pUnshield, index);
-    FileName = to_utf<char>(FileName.c_str(), FileName.c_str() + FileName.size(), Locale);
+    FileName = NpaFile::ToUtf8(FileName);
 
     cout << "Extracting: " << FileName << endl;
     if (!unshield_file_save(pUnshield, index, FileName.c_str()))
@@ -58,6 +54,7 @@ int main(int argc, char** argv)
         return 1;
     }
 
+    NpaFile::SetLocale("ja_JP.CP932");
     string MovieDirectory = string(argv[2]) + "/dx";
     string CabPath = string(argv[1]) + "/product/data2.cab";
     unshield_set_log_level(UNSHIELD_LOG_LEVEL_WARNING);
@@ -73,7 +70,7 @@ int main(int argc, char** argv)
     {
         if (UnshieldFileGroup* pFileGroup = unshield_file_group_get(pUnshield, i))
         {
-            std::string Utf8Name = to_utf<char>(pFileGroup->name, pFileGroup->name + strlen(pFileGroup->name), Locale);
+            std::string Utf8Name = NpaFile::ToUtf8(pFileGroup->name);
 
             const char* OutputDirectory;
             if (Utf8Name == Directories[1])
