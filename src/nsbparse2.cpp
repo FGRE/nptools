@@ -121,6 +121,11 @@ int main(int argc, char** argv)
     ScriptFile Script(argv[1], ScriptFile::NSB);
     Output.open(argv[2]);
 
+    for (auto i : Script.GetIncludes())
+        Output << "#include \"" << i << "\"\n";
+    if (!Script.GetIncludes().empty())
+        Output << '\n';
+
     uint32_t SourceIter = 0;
     while (pLine = Script.GetLine(SourceIter++))
     {
