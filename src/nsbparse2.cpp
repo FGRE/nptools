@@ -17,15 +17,31 @@
  * */
 #include <iostream>
 #include <fstream>
-#include <boost/lexical_cast.hpp>
 #include "scriptfile.hpp"
 #include "npafile.hpp"
 #include "nsbmagic.hpp"
 #include "nsbconstants.hpp"
 using namespace std;
 
+struct Ofstream
+{
+    Ofstream() : Written(false)
+    {
+    }
+
+    template <class T>
+    Ofstream& operator<<(const T& t)
+    {
+        Written = true;
+        Output << t;
+        return *this;
+    }
+    bool Written;
+    ofstream Output;
+};
+
 Line* pLine;
-ofstream Output;
+Ofstream Output;
 vector<string> Params;
 int IndentLevel = 0;
 
@@ -76,7 +92,7 @@ int main(int argc, char** argv)
 {
     if (argc < 3 || argc > 4)
     {
-        std::cout << "usage: " << argv[0] << " <input.nsb> <output.nss> [charset]" << std::endl;
+        cout << "usage: " << argv[0] << " <input.nsb> <output.nss> [charset]" << endl;
         return 1;
     }
 
@@ -86,7 +102,7 @@ int main(int argc, char** argv)
         NpaFile::SetLocale("ja_JP.CP932");
 
     ScriptFile Script(argv[1], ScriptFile::NSB);
-    Output.open(argv[2]);
+    Output.Output.open(argv[2]);
 
     for (auto i : Script.GetIncludes())
         Output << "#include \"" << i << "\"\n";
@@ -102,6 +118,7 @@ int main(int argc, char** argv)
                 Indent();
                 Output << "{\n";
                 ++IndentLevel;
+                Output.Written = false;
                 break;
             case MAGIC_SCOPE_END:
                 --IndentLevel;
@@ -109,8 +126,14 @@ int main(int argc, char** argv)
                 Output << "}\n";
                 break;
             case MAGIC_CLEAR_PARAMS:
+                if (!Output.Written && !Params.empty())
+                {
+                    Indent();
+                    Output << Params[0];
+                }
                 Output << ";\n";
                 Params.clear();
+                Output.Written = false;
                 break;
             case MAGIC_VARIABLE:
                 Params.push_back(pLine->Params[0]);
@@ -253,6 +276,12 @@ int main(int argc, char** argv)
                 Output << "call_scene " << pLine->Params[0] << ";\n";
                 break;
             // Builtins which return value
+            case MAGIC_UNK116:
+            case MAGIC_UNK129:
+            case MAGIC_UNK146:
+            case MAGIC_UNK150:
+            case MAGIC_UNK131:
+            case MAGIC_MESSAGE:
             case MAGIC_STR_STR:
             case MAGIC_IMAGE_HORIZON:
             case MAGIC_IMAGE_VERTICAL:
@@ -286,7 +315,7 @@ int main(int argc, char** argv)
             case MAGIC_ARRAY_READ:
             {
                 string Param = pLine->Params[0];
-                int Size = boost::lexical_cast<int>(pLine->Params[1]);
+                int Size = stoi(pLine->Params[1]);
                 for (int i = Params.size() - Size; i < Params.size(); ++i)
                     Param += "[" + Params[i] + "]";
                 Params.resize(Params.size() - Size);
