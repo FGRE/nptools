@@ -297,7 +297,7 @@ int main(int argc, char** argv)
             case MAGIC_REMAIN_TIME:
             case MAGIC_DURATION_TIME:
             case MAGIC_PASSAGE_TIME:
-            case MAGIC_GET_MODULE_FILE_NAME:
+            case MAGIC_MODULE_FILE_NAME:
                 WriteToParams();
                 break;
             case MAGIC_SELECT:
