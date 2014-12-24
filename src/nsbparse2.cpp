@@ -312,7 +312,7 @@ int main(int argc, char** argv)
                 Indent();
                 Output << "return;\n";
                 break;
-            case MAGIC_ARRAY_READ:
+            case MAGIC_SUB_SCRIPT:
             {
                 string Param = pLine->Params[0];
                 int Size = stoi(pLine->Params[1]);

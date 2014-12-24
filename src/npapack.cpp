@@ -19,6 +19,7 @@
 
 #include <boost/filesystem.hpp>
 #include <iostream>
+using namespace std;
 using namespace boost::filesystem;
 
 void RecursiveAppend(ONpaFile& Archive, const path& dir)
@@ -33,7 +34,7 @@ void RecursiveAppend(ONpaFile& Archive, const path& dir)
             RecursiveAppend(Archive, i->path());
         else
         {
-            std::cout << "Appending file: " << i->path().string() << "..." << std::endl;
+            cout << "Appending file: " << i->path().string() << "..." << endl;
             Archive.WriteFile(i->path().string());
         }
     }
@@ -43,7 +44,7 @@ int main(int argc, char** argv)
 {
     if (argc < 2 || argc > 3)
     {
-        std::cout << "usage: " << argv[0] << " <directory> [charset]" << std::endl;
+        cout << "usage: " << argv[0] << " <directory> [charset]" << endl;
         return 1;
     }
 
@@ -52,7 +53,7 @@ int main(int argc, char** argv)
     else
         NpaFile::SetLocale("ja_JP.CP932");
 
-    std::string DirName(argv[1]);
+    string DirName(argv[1]);
     if (DirName.back() == '/')
         DirName.resize(DirName.size() - 1);
 

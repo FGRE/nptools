@@ -70,7 +70,7 @@ int main(int argc, char** argv)
     {
         if (UnshieldFileGroup* pFileGroup = unshield_file_group_get(pUnshield, i))
         {
-            std::string Utf8Name = NpaFile::ToUtf8(pFileGroup->name);
+            string Utf8Name = NpaFile::ToUtf8(pFileGroup->name);
 
             const char* OutputDirectory;
             if (Utf8Name == Directories[1])
