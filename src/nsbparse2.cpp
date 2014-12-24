@@ -251,8 +251,10 @@ int main(int argc, char** argv)
             case MAGIC_NEGA_EXPRESSION:
                 Params[Params.size() - 1] = string("-") + Params[Params.size() - 1];
                 break;
+            case MAGIC_AT_EXPRESSION:
+                Params.back() = '@' + Params.back();
+                break;
             // Currently ignored builtins
-            case MAGIC_PLACEHOLDER_PARAM:
             case MAGIC_JUMP: // TODO: Check for else/else if
             case MAGIC_WHILE_END:
             case MAGIC_CASE_END:
