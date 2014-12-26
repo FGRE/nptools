@@ -282,7 +282,7 @@ int main(int argc, char** argv)
             case MAGIC_UNK129:
             case MAGIC_UNK146:
             case MAGIC_UNK150:
-            case MAGIC_UNK131:
+            case MAGIC_RANDOM:
             case MAGIC_MESSAGE:
             case MAGIC_STR_STR:
             case MAGIC_IMAGE_HORIZON:
