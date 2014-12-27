@@ -40,12 +40,12 @@ int main(int argc, char** argv)
     ofstream Output(string(argv[1], 0, strlen(argv[1]) - 3) + "nsb", ios::binary);
     ofstream MapOutput(string(argv[1], 0, strlen(argv[1]) - 3) + "map", ios::binary);
 
-    NpaPrivate::Buffer NsbBuffer, MapBuffer;
+    Npa::Buffer NsbBuffer, MapBuffer;
     uint32_t Size;
     char* pBuffer = fs::ReadFile(argv[1], Size);
     Nss::Compile(pBuffer, Size, &NsbBuffer, &MapBuffer);
     delete[] pBuffer;
 
-    Output.write(&NsbBuffer.Data[0], NsbBuffer.Size());
-    MapOutput.write(&MapBuffer.Data[0], MapBuffer.Size());
+    Output.write(NsbBuffer.GetData(), NsbBuffer.GetSize());
+    MapOutput.write(MapBuffer.GetData(), MapBuffer.GetSize());
 }
