@@ -19,14 +19,15 @@
 #include "isgfile.hpp"
 #include "fscommon.hpp"
 #include <iostream>
+using namespace std;
 
 int PrintArguments(char** argv)
 {
     const char** NipaGames = INipaFile::GetGameStringList();
-    std::cout << "Supported games:\nSteinsGate\n";
+    cout << "Supported games:\nSteinsGate\n";
     for (int i = 0; NipaGames[i]; ++i)
-        std::cout << NipaGames[i] << '\n';
-    std::cout << "usage: " << argv[0] << " <file.npa> <game> [charset]" << std::endl;
+        cout << NipaGames[i] << '\n';
+    cout << "usage: " << argv[0] << " <file.npa> <game> [charset]" << endl;
     return 1;
 }
 
@@ -41,7 +42,7 @@ int main(int argc, char** argv)
         NpaFile::SetLocale("ja_JP.CP932");
 
     INpaFile* pArchive;
-    if (std::strcmp(argv[2], "SteinsGate") == 0)
+    if (strcmp(argv[2], "SteinsGate") == 0)
         pArchive = new ISGFile(argv[1]);
     else
     {
@@ -57,7 +58,7 @@ int main(int argc, char** argv)
             continue;
 
         char* pData = pArchive->ReadFile(iter);
-        std::cout << "Writing file: " << iter->first << std::endl;
+        cout << "Writing file: " << iter->first << endl;
         fs::WriteFileDirectory(iter->first, pData, pArchive->GetFileSize(iter));
         delete[] pData;
     }
