@@ -17,9 +17,8 @@
  * */
 #include <libunshield.h>
 #include <iostream>
-#include <boost/filesystem.hpp>
+#include "fscommon.hpp"
 #include "npafile.hpp"
-using namespace boost::filesystem;
 using namespace std;
 
 const char* Directories[2] =
@@ -32,8 +31,8 @@ void ExtractFile(Unshield* pUnshield, int index, string OutputDirectory)
 {
     string FileName = OutputDirectory + string("/");
 
-    if (!exists(path(OutputDirectory)))
-        create_directory(path(OutputDirectory));
+    if (!fs::Exists(OutputDirectory))
+        fs::CreateDirectory(OutputDirectory);
 
     FileName += unshield_file_name(pUnshield, index);
     FileName = NpaFile::ToUtf8(FileName);
