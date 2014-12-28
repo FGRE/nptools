@@ -16,10 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * */
 #include "onpafile.hpp"
-
 #include <boost/filesystem.hpp>
-#include <iostream>
-using namespace std;
 using namespace boost::filesystem;
 
 void RecursiveAppend(ONpaFile& Archive, const path& dir)

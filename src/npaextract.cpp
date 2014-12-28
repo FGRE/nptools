@@ -18,8 +18,6 @@
 #include "inipafile.hpp"
 #include "isgfile.hpp"
 #include "fscommon.hpp"
-#include <iostream>
-using namespace std;
 
 int PrintArguments(char** argv)
 {

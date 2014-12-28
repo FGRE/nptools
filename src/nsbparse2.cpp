@@ -15,13 +15,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * */
-#include <iostream>
 #include <fstream>
 #include "scriptfile.hpp"
 #include "npafile.hpp"
 #include "nsbmagic.hpp"
 #include "nsbconstants.hpp"
-using namespace std;
 
 struct Ofstream
 {

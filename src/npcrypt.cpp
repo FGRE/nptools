@@ -22,7 +22,7 @@ int main(int argc, char** argv)
 {
     if (argc != 3)
     {
-        std::cout << "usage: " << argv[0] << " <input> <output>" << std::endl;
+        cout << "usage: " << argv[0] << " <input> <output>" << endl;
         return 1;
     }
 

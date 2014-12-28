@@ -15,20 +15,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * */
-#include <iostream>
 #include <fstream>
-#include <cstring>
 #include "scriptfile.hpp"
 #include "npafile.hpp"
 #include "fscommon.hpp"
 #include "buffer.hpp"
-using namespace std;
 
 int main(int argc, char** argv)
 {
     if (argc < 2 || argc > 3)
     {
-        std::cout << "usage: " << argv[0] << " <input.nss> [charset]" << std::endl;
+        cout << "usage: " << argv[0] << " <input.nss> [charset]" << endl;
         return 1;
     }
 

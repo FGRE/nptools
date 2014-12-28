@@ -16,10 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  * */
 #include <libunshield.h>
-#include <iostream>
 #include "fscommon.hpp"
 #include "npafile.hpp"
-using namespace std;
 
 const char* Directories[2] =
 {
