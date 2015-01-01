@@ -2,6 +2,22 @@ cmake_minimum_required(VERSION 2.8)
 project(nptools)
 
 set(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules")
+
+# set version
+set(NPTOOLS_VERSION_MAJOR "0")
+set(NPTOOLS_VERSION_MINOR "4")
+set(NPTOOLS_VERSION_PATCH "0")
+set(NPTOOLS_VERSION "${NPTOOLS_VERSION_MAJOR}.${NPTOOLS_VERSION_MINOR}.${NPTOOLS_VERSION_PATCH}")
+
+# append git revision if available
+include(get-git-revision)
+get_git_revision(NPTOOLS_VERSION_GIT)
+if(NOT "${NPTOOLS_VERSION_GIT}" STREQUAL "")
+    set(NPTOOLS_VERSION "${NPTOOLS_VERSION}-${NPTOOLS_VERSION_GIT}")
+endif()
+
+message(STATUS "Configuring nptools version " ${NPTOOLS_VERSION})
+
 find_package(Boost REQUIRED COMPONENTS system filesystem)
 find_package(LIBUNSHIELD)
 if (NOT LIBUNSHIELD_FOUND)
