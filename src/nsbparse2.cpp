@@ -21,20 +21,6 @@
 #include "nsbmagic.hpp"
 #include "nsbconstants.hpp"
 
-bool IsValidConstant(const string& String)
-{
-    return Nsb::IsValidConstant<Nsb::PhoneMail>(String) ||
-           Nsb::IsValidConstant<Nsb::PhoneMode>(String) ||
-           Nsb::IsValidConstant<Nsb::PhID>(String) ||
-           Nsb::IsValidConstant<Nsb::Null>(String) ||
-           Nsb::IsValidConstant<Nsb::Boolean>(String) ||
-           Nsb::IsValidConstant<Nsb::Request>(String) ||
-           Nsb::IsValidConstant<Nsb::Tempo>(String) ||
-           Nsb::IsValidConstant<Nsb::Shade>(String) ||
-           Nsb::IsValidConstant<Nsb::Color>(String) ||
-           Nsb::IsValidConstant<Nsb::Tone>(String);
-}
-
 struct Ofstream
 {
     Ofstream() : Written(false)
@@ -151,7 +137,7 @@ int main(int argc, char** argv)
                 Params.push_back(pLine->Params[0]);
                 break;
             case MAGIC_LITERAL:
-                if (pLine->Params[0] == "STRING" && pLine->Params[1][0] != '#' && !IsValidConstant(pLine->Params[1].c_str()))
+                if (pLine->Params[0] == "STRING" && pLine->Params[1][0] != '#' && !Nsb::IsValidConstant(pLine->Params[1].c_str()))
                     Params.push_back(string("\"" + pLine->Params[1] + "\""));
                 else
                     Params.push_back(pLine->Params[1]);
