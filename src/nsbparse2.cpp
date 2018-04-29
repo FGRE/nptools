@@ -122,6 +122,7 @@ int main(int argc, char** argv)
                 --IndentLevel;
                 Indent();
                 Output << "}\n";
+                Output.Written = false;
                 break;
             case MAGIC_CLEAR_PARAMS:
                 if (!Output.Written && !Params.empty())
@@ -276,6 +277,7 @@ int main(int argc, char** argv)
                 Output << "call_scene " << pLine->Params[0] << ";\n";
                 break;
             // Builtins which return value
+            case MAGIC_CONQUEST:
             case MAGIC_UNK116:
             case MAGIC_UNK129:
             case MAGIC_UNK146:
