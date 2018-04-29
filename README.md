@@ -10,3 +10,4 @@ nptools is a collection of utilities for manipulating nitroplus game files.
 **nsbparse**: Parses .nsb script file.  
 **nsbcompile**: Compiles script file into .nsb format.  
 **npinstall**: Installs nitroplus game.  
+**npcrypt**: Decrypts a Steins;Gate save file
