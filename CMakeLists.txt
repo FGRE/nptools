@@ -50,6 +50,7 @@ add_executable(nsbparse src/nsbparse.cpp)
 add_executable(nsbcompile2 src/nsbcompile2.cpp)
 add_executable(nsbparse2 src/nsbparse2.cpp)
 add_executable(npcrypt src/npcrypt.cpp)
+add_executable(npfparse src/npfparse.cpp)
 
 # We don't need npinstall on Windows
 if (NOT WIN32)
@@ -62,6 +63,7 @@ target_link_libraries(nsbparse npa)
 target_link_libraries(nsbcompile2 npa)
 target_link_libraries(nsbparse2 npa)
 target_link_libraries(npcrypt npa)
+target_link_libraries(npfparse npa)
 
 # We don't need npinstall on Windows
 if (NOT WIN32)
