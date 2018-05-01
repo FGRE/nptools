@@ -1,6 +1,6 @@
 /* 
  * npcrypt: Nitroplus game files encrypt/decrypt tool
- * Copyright (C) 2014-2016 Mislav Blažević <krofnica996@gmail.com>
+ * Copyright (C) 2014-2016,2018 Mislav Blažević <krofnica996@gmail.com>
  * 
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
