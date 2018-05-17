@@ -41,11 +41,11 @@ int main(int argc, char** argv)
         string Name2 = NpaFile::ToUtf8(SaveData.ReadStr32());
         uint32_t Type = SaveData.Read<uint32_t>();
         int32_t IntVal = SaveData.Read<int32_t>();
-        int32_t unk = SaveData.Read<int32_t>();
+        float FloatVal = SaveData.Read<float>();
         string StrVal = NpaFile::ToUtf8(SaveData.ReadStr32());
         bool unk2 = SaveData.Read<bool>();
         string ArrayRef = NpaFile::ToUtf8(SaveData.ReadStr32());
-        cout << "ENTRY " << i << ": " << Name1 << " " << Name2 << " " << Type << " " << IntVal << " " << unk << " " << StrVal << " " << unk2 << " " << ArrayRef << '\n';
+        cout << "ENTRY " << i << ": " << Name1 << " " << Name2 << " " << Type << " " << IntVal << " " << FloatVal << " " << StrVal << " " << unk2 << " " << ArrayRef << '\n';
     }
 
     uint32_t NumArrs = SaveData.Read<uint32_t>();
