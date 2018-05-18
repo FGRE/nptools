@@ -277,6 +277,7 @@ int main(int argc, char** argv)
                 Output << "call_scene " << pLine->Params[0] << ";\n";
                 break;
             // Builtins which return value
+            case MAGIC_INTEGER:
             case MAGIC_UNK123:
             case MAGIC_CONQUEST:
             case MAGIC_UNK116:
@@ -295,7 +296,7 @@ int main(int argc, char** argv)
             case MAGIC_STRING:
             case MAGIC_UNK140:
             case MAGIC_READ_FILE:
-            case MAGIC_UNK184:
+            case MAGIC_ENABLE_BACKLOG:
             case MAGIC_TIME:
             case MAGIC_REMAIN_TIME:
             case MAGIC_DURATION_TIME:
