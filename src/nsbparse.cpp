@@ -64,13 +64,7 @@ int main(int argc, char** argv)
         if (pLine->Magic == MAGIC_SCOPE_BEGIN)
             ++indent;
 
-        File << Nsb::StringifyMagic(pLine->Magic);
-
-        File << "(";
-        for (uint32_t i = 0; i < pLine->Params.size(); ++i)
-            File << pLine->Params[i] << ((i != (pLine->Params.size() - 1)) ? ", " : "");
-        File << ");";
-
+        File << pLine->Stringify();
         auto i = Symbols.find(SourceIter - 1);
         if (i != Symbols.end())
             for (string& s : i->second)
