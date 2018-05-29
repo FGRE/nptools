@@ -174,6 +174,9 @@ int main(int argc, char** argv)
             case MAGIC_SUB_ASSIGN:
                 AssignOperator("-=");
                 break;
+            case MAGIC_MOD_ASSIGN:
+                AssignOperator("%=");
+                break;
             case MAGIC_ADD_EXPRESSION:
                 BinaryOperator("+");
                 break;
@@ -198,13 +201,13 @@ int main(int argc, char** argv)
             case MAGIC_CMP_LESS:
                 BinaryOperator("<");
                 break;
-            case MAGIC_LOGICAL_NOT_EQUAL:
+            case MAGIC_CMP_NE:
                 BinaryOperator("!=");
                 break;
-            case MAGIC_LOGICAL_GREATER_EQUAL:
+            case MAGIC_CMP_GE:
                 BinaryOperator(">=");
                 break;
-            case MAGIC_LOGICAL_LESS_EQUAL:
+            case MAGIC_CMP_LE:
                 BinaryOperator("<=");
                 break;
             case MAGIC_CMP_LOGICAL_AND:
@@ -213,7 +216,7 @@ int main(int argc, char** argv)
             case MAGIC_CMP_LOGICAL_OR:
                 BinaryOperator("||");
                 break;
-            case MAGIC_LOGICAL_NOT:
+            case MAGIC_NOT_EXPRESSION:
                 Params[Params.size() - 1] = string("!") + Params[Params.size() - 1];
                 break;
             case MAGIC_ASSIGN:
