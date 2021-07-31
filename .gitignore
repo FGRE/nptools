@@ -1,3 +1,14 @@
+# cmake files
+CMakeFiles/
+CMakeCache.txt
+*.cmake
+Makefile
+_CPack_Packages
+install_manifest.txt
+*.tar.bz2
+include/npaversion.hpp
+!cmake/Modules/*.cmake
+
 # Compiled Object files
 *.slo
 *.lo
@@ -35,4 +46,6 @@ nipa
 nsbparse2
 nsbcompile2
 npcrypt
+npfparse
+mpkextract
 *.exe
