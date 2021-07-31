@@ -51,7 +51,7 @@ int main(int argc, char** argv)
         NpaFile::SetLocale("ja_JP.CP932");
 
     string DirName(argv[1]);
-    if (DirName.back() == '/')
+    if (DirName.back() == '/' || DirName.back() == '\\')
         DirName.resize(DirName.size() - 1);
 
     ONpaFile Archive(DirName + ".npa");
